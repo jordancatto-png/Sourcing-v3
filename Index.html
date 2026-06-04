@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Simson Sourcing</title>
+
+<!-- ── iOS PWA / Home Screen app metadata ───────────────────────────────── -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Simson">
+<meta name="theme-color" content="#161b1e">
+<meta name="format-detection" content="telephone=no">
+
+<!-- App icon (180×180 SVG, served inline as data URI so no extra files needed) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20180%20180%22%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%2240%22%20fill%3D%22%23161b1e%22/%3E%3Crect%20x%3D%2228%22%20y%3D%2228%22%20width%3D%22124%22%20height%3D%22124%22%20rx%3D%2218%22%20fill%3D%22none%22%20stroke%3D%22%2300A8DA%22%20stroke-width%3D%226%22/%3E%3Ctext%20x%3D%2290%22%20y%3D%22115%22%20font-family%3D%22Helvetica%2CArial%2Csans-serif%22%20font-size%3D%2272%22%20font-weight%3D%22800%22%20text-anchor%3D%22middle%22%20fill%3D%22%2300A8DA%22%3ESA%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23161b1e%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2222%22%20font-family%3D%22Helvetica%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20text-anchor%3D%22middle%22%20fill%3D%22%2300A8DA%22%3ES%3C/text%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Barlow Condensed',sans-serif;background:#161b1e;color:#e8eaeb;min-height:100vh}
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-track{background:#1e2428}
+  ::-webkit-scrollbar-thumb{background:#00A8DA;border-radius:3px}
+
+  input,select{
+    font-family:'Barlow',sans-serif;background:#252d32;border:1px solid rgba(255,255,255,0.07);
+    color:#e8eaeb;border-radius:6px;padding:10px 14px;outline:none;transition:border-color .2s,box-shadow .2s;font-size:14px;
+  }
+  input:focus,select:focus{border-color:#00A8DA;box-shadow:0 0 0 3px rgba(0,168,218,0.12)}
+  input::placeholder{color:#5a6970}
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+  button{cursor:pointer;font-family:'Barlow Condensed',sans-serif;border:none;letter-spacing:.05em}
+  .primary-btn{
+    background:#00A8DA;color:#fff;padding:12px 32px;font-size:14px;font-weight:700;
+    letter-spacing:0.1em;text-transform:uppercase;border-radius:6px;transition:all .2s;
+  }
+  .primary-btn:hover{background:#0098c4;box-shadow:0 0 24px rgba(0,168,218,0.3)}
+  .outline-btn{
+    background:#252d32;color:#00A8DA;border:1px solid #00A8DA;padding:8px 18px;
+    font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+    border-radius:5px;transition:all .2s;
+  }
+  .outline-btn:hover{background:#00A8DA;color:#fff}
+  .red-btn{
+    background:none;border:1px solid #e74c3c;color:#e74c3c;padding:6px 14px;font-size:11px;
+    font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border-radius:5px;transition:all .2s;
+  }
+  .red-btn:hover{background:#e74c3c;color:#fff}
+  .filter-chip{
+    background:#252d32;border:1px solid rgba(255,255,255,0.07);color:#7a8a92;
+    padding:6px 14px;font-size:11px;font-weight:600;letter-spacing:0.08em;
+    text-transform:uppercase;border-radius:20px;cursor:pointer;transition:all .2s;
+  }
+  .filter-chip.active{background:rgba(0,168,218,0.12);border-color:#00A8DA;color:#00A8DA}
+  .icon-btn{background:none;border:none;color:#e74c3c;font-size:16px;padding:2px 4px;cursor:pointer;line-height:1}
+
+  /* Header */
+  #header{border-bottom:1px solid rgba(255,255,255,0.07);background:#1e2428;
+    background-image:radial-gradient(ellipse at 20% 50%,rgba(0,168,218,0.04) 0%,transparent 60%)}
+  #header-inner{max-width:1280px;margin:0 auto;padding:0 28px}
+  #header-top{display:flex;align-items:center;gap:16px;padding:24px 0 12px}
+  #logo{
+    width:44px;height:44px;background:linear-gradient(135deg,#00A8DA,rgba(0,168,218,0.5));
+    border-radius:10px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;flex-shrink:0;box-shadow:0 4px 16px rgba(0,168,218,0.3)
+  }
+  #title{font-size:24px;font-weight:800;letter-spacing:0.03em;text-transform:uppercase}
+  #subtitle{font-size:11px;color:#7a8a92;letter-spacing:0.15em;text-transform:uppercase;
+    font-family:'Barlow',sans-serif;margin-top:2px}
+  #tabs{display:flex;gap:0}
+  .tab-btn{
+    background:none;border:none;color:#7a8a92;font-size:13px;font-weight:600;
+    letter-spacing:0.12em;text-transform:uppercase;padding:14px 24px;
+    position:relative;transition:color .2s;cursor:pointer;
+  }
+  .tab-btn.active{color:#00A8DA}
+  .tab-btn.active::after{
+    content:'';position:absolute;bottom:0;left:24px;right:24px;height:2px;background:#00A8DA
+  }
+  .tab-btn:hover{color:#e8eaeb}
+
+  /* Main */
+  #main{max-width:1280px;margin:0 auto;padding:28px}
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+
+  .panel{background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:24px;margin-bottom:20px}
+
+  .section-lbl{font-size:11px;color:#00A8DA;letter-spacing:0.2em;text-transform:uppercase;
+    margin-bottom:18px;font-family:'Barlow',sans-serif;font-weight:600;display:block}
+  .lbl{font-size:11px;color:#7a8a92;letter-spacing:0.12em;text-transform:uppercase;
+    margin-bottom:6px;font-family:'Barlow',sans-serif;font-weight:600;display:block}
+  .hdr-lbl{font-size:10px;color:#5a6970;letter-spacing:0.15em;text-transform:uppercase;font-family:'Barlow',sans-serif;font-weight:600}
+
+  /* Assumptions strip */
+  .assumptions-strip{
+    display:flex;background:#161b1e;border:1px solid rgba(255,255,255,0.07);
+    border-radius:8px;margin-bottom:20px;overflow:hidden
+  }
+  .assumption-item{flex:1;padding:12px 14px;text-align:center;border-right:1px solid rgba(255,255,255,0.07)}
+  .assumption-item:last-child{border-right:none}
+  .assumption-val{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.1rem;color:#00A8DA;display:block}
+  .assumption-lbl{font-size:0.65rem;color:#7a8a92;text-transform:uppercase;letter-spacing:0.1em;margin-top:1px}
+
+  /* Inputs */
+  .input-grid-calc{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:14px;align-items:end}
+  .input-grid-calc input,.input-grid-calc select{width:100%}
+  .pencil-row{display:flex;gap:14px;align-items:end;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)}
+  .pencil-row .lbl{margin-bottom:6px}
+  .adv-toggle{
+    margin-top:14px;font-size:11px;color:#7a8a92;cursor:pointer;display:inline-flex;
+    align-items:center;gap:6px;letter-spacing:0.1em;text-transform:uppercase;font-family:'Barlow',sans-serif
+  }
+  .adv-toggle:hover{color:#00A8DA}
+  .adv-toggle .chev{transition:transform .2s}
+  .adv-toggle.open .chev{transform:rotate(180deg)}
+  .adv-panel{display:none;margin-top:14px;padding:16px;background:#161b1e;border-radius:8px;
+    grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+  .adv-panel.open{display:grid}
+  .adv-panel input{width:100%}
+
+  /* Stats */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+  .stat-box{background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:14px 18px;text-align:center}
+  .stat-val{font-size:24px;font-weight:800;color:#00A8DA}
+  .stat-lbl{font-size:10px;color:#7a8a92;letter-spacing:0.15em;text-transform:uppercase;margin-top:2px;font-family:'Barlow',sans-serif;font-weight:600}
+
+  .chips-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+
+  /* Results table */
+  .results-hdr{display:grid;grid-template-columns:2fr .8fr .9fr .9fr 1fr 1fr;gap:12px;padding:6px 20px;margin-bottom:4px}
+  .result-row{
+    background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:8px;
+    padding:14px 20px;margin-bottom:8px;display:grid;
+    grid-template-columns:2fr .8fr .9fr .9fr 1fr 1fr;align-items:center;gap:12px;transition:all .2s;
+  }
+  .result-row:hover{border-color:rgba(0,168,218,0.3)}
+  .result-row.best{border-color:#00A8DA;background:rgba(0,168,218,0.05);box-shadow:0 0 16px rgba(0,168,218,0.1)}
+  .result-name{font-weight:700;font-size:15px;color:#e8eaeb}
+  .result-chips{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+  .chip{
+    background:#2e373d;border-radius:3px;padding:3px 8px;font-size:11px;
+    color:#7a8a92;display:inline-block;font-family:'Barlow',sans-serif;font-weight:500;
+  }
+  .chip-blue{background:rgba(0,168,218,0.12);color:#00A8DA;border:1px solid rgba(0,168,218,0.3)}
+  .result-big{font-size:18px;font-weight:700}
+  .result-big-xl{font-size:22px;font-weight:800}
+  .result-sub{font-size:10px;color:#5a6970;font-family:'Barlow',sans-serif;font-weight:500}
+  .result-right{text-align:right}
+  .result-phone{font-size:11px;color:#00A8DA;margin-top:4px;font-family:'Barlow',sans-serif}
+
+  .empty{text-align:center;padding:60px 0;color:#5a6970}
+  .empty-icon{font-size:48px;margin-bottom:16px}
+  .empty-title{font-size:18px;font-weight:600;color:#7a8a92;letter-spacing:0.05em}
+  .empty-sub{font-size:12px;color:#5a6970;margin-top:8px;font-family:'Barlow',sans-serif}
+
+  /* Quarry cards */
+  .card{background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:20px;margin-bottom:16px}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;gap:12px}
+  .card-title{font-size:18px;font-weight:700;margin-bottom:4px}
+  .card-meta{font-size:12px;color:#7a8a92;font-family:'Barlow',sans-serif;line-height:1.6}
+  .card-meta .pc{color:#00A8DA}
+  .card-meta .pencil{color:#00A8DA;font-weight:600}
+  .card-meta .note{color:#5a6970}
+  .card-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+  .materials-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+  .mat-tile{
+    background:#161b1e;border:1px solid rgba(255,255,255,0.05);border-radius:6px;
+    padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  }
+  .mat-name{font-size:13px;font-weight:600;color:#e8eaeb}
+  .mat-name-input{
+    width:100%;font-size:13px;font-weight:600;color:#e8eaeb;
+    background:#0e1214;border:1px solid rgba(0,168,218,0.3);border-radius:4px;
+    padding:5px 8px;
+  }
+  .mat-name-input:focus{border-color:#00A8DA;outline:none}
+  .mat-tile.editing{border-color:rgba(0,168,218,0.2);align-items:stretch}
+  .mat-tile.editing .mat-rate{align-items:center}
+  .mat-sub{font-size:10px;color:#5a6970;font-family:'Barlow',sans-serif;margin-top:3px}
+  .mat-rate{display:flex;align-items:center;gap:6px}
+  .pound{font-size:13px;color:#7a8a92}
+  .rate-input{width:80px;padding:6px 8px;font-size:13px;text-align:right}
+  .add-mat-row{margin-top:12px;display:flex;gap:8px;align-items:center}
+  .add-mat-row input{flex:1}
+  .add-mat-row .rate-input{flex:none}
+
+  .quarries-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .quarries-top-left .lbl{color:#00A8DA;letter-spacing:0.2em;font-size:11px}
+  .quarries-top-sub{font-size:12px;color:#5a6970;margin-top:4px;font-family:'Barlow',sans-serif}
+
+  .add-q-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+  .add-q-grid input{width:100%}
+
+  /* Site Cost tab */
+  .site-controls{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end;margin-bottom:20px}
+  .site-controls input,.site-controls select{width:100%}
+
+  /* Quote Builder */
+  .quote-header-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .quote-header-grid input{width:100%}
+  .ql-hdr{
+    display:grid;grid-template-columns:auto 1.8fr 1.3fr 0.6fr 0.55fr 0.8fr 0.8fr 0.6fr 1fr;
+    gap:10px;padding:6px 16px;margin-bottom:4px
+  }
+  .quote-line{
+    background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:8px;
+    padding:12px 16px;margin-bottom:6px;display:grid;
+    grid-template-columns:auto 1.8fr 1.3fr 0.6fr 0.55fr 0.8fr 0.8fr 0.6fr 1fr;
+    gap:10px;align-items:center;transition:all .15s;
+  }
+  .quote-line.skipped{opacity:0.4}
+  .quote-line.unsourced{border-color:rgba(231,76,60,0.3)}
+  .quote-line.custom{border-left:3px solid #00A8DA}
+  .quote-line input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#00A8DA}
+  .quote-line input[type=number]{padding:5px 8px;font-size:13px;text-align:right;width:100%}
+  .quote-line input[type=text]{padding:5px 8px;font-size:13px;width:100%}
+  .quote-line select{padding:5px 8px;font-size:12px;width:100%}
+  .ql-name{font-weight:600;font-size:13px;color:#e8eaeb;line-height:1.3}
+  .ql-canon{font-size:10px;color:#7a8a92;margin-top:2px;font-family:'Barlow',sans-serif}
+  .ql-num{font-size:13px;font-weight:700;text-align:right}
+  .ql-quote{font-size:16px;font-weight:800;color:#00A8DA;text-align:right}
+  .ql-sub{font-size:10px;color:#5a6970;font-family:'Barlow',sans-serif;text-align:right}
+  .ql-section{
+    margin-top:18px;margin-bottom:6px;padding:6px 16px;
+    font-size:10px;color:#00A8DA;letter-spacing:0.18em;text-transform:uppercase;
+    font-family:'Barlow',sans-serif;font-weight:700;
+  }
+  .material-line{
+    background:#1e2428;border:1px solid rgba(255,255,255,0.07);border-radius:8px;
+    padding:14px 18px;margin-bottom:8px;display:grid;
+    grid-template-columns:auto 1.8fr 0.9fr 1.4fr 0.9fr 0.9fr 1fr 1fr;gap:12px;align-items:center
+  }
+  .material-line.skipped{opacity:0.4}
+  .material-line input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#00A8DA}
+  .material-line input[type=number]{padding:6px 10px;font-size:14px;text-align:right;width:90px}
+  .material-line select{padding:6px 10px;font-size:13px}
+  .ml-name{font-weight:600;font-size:14px}
+  .ml-source{font-size:11px;color:#7a8a92;margin-top:2px;font-family:'Barlow',sans-serif}
+  .ml-num{font-size:15px;font-weight:700}
+  .ml-num.xl{font-size:18px;font-weight:800;color:#00A8DA}
+  .ml-sub{font-size:10px;color:#5a6970;font-family:'Barlow',sans-serif}
+  .ml-right{text-align:right}
+  .site-summary{
+    background:linear-gradient(135deg,#1e2428,#252d32);border:1px solid rgba(0,168,218,0.3);
+    border-radius:10px;padding:20px 24px;margin-top:16px;display:grid;
+    grid-template-columns:repeat(4,1fr);gap:20px
+  }
+  .summary-val{font-size:28px;font-weight:800;color:#00A8DA;font-family:'Barlow Condensed',sans-serif}
+  .summary-lbl{font-size:10px;color:#7a8a92;letter-spacing:0.15em;text-transform:uppercase;margin-top:2px;font-family:'Barlow',sans-serif;font-weight:600}
+  .ml-hdr{display:grid;grid-template-columns:auto 1.8fr 0.9fr 1.4fr 0.9fr 0.9fr 1fr 1fr;gap:12px;padding:6px 20px;margin-bottom:4px}
+  .add-line-btn{
+    width:100%;padding:14px;background:#161b1e;border:1px dashed rgba(0,168,218,0.4);
+    color:#00A8DA;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;
+    letter-spacing:0.1em;text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;
+    margin-top:8px;transition:all .2s
+  }
+  .add-line-btn:hover{background:rgba(0,168,218,0.06);border-color:#00A8DA}
+
+  .export-row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+
+  @media print {
+    body{background:#fff;color:#000}
+    #header,#tabs,.tab-btn,.primary-btn,.outline-btn,.red-btn,.add-line-btn,.export-row{display:none !important}
+    .panel,.material-line,.site-summary,.card{background:#fff !important;border:1px solid #ccc !important;color:#000 !important}
+    .ml-num.xl,.summary-val,.stat-val{color:#000 !important}
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     MOBILE PORTRAIT — iPhone 6.3" 19.5:9 (~402×874 CSS px)
+     Single-column stack, larger tap targets, compact spacing. Triggers at
+     ≤768px so anything from a phone to a small tablet gets the mobile UI.
+     ═════════════════════════════════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    body { font-size:14px }
+
+    /* Respect iPhone safe areas (notch / Dynamic Island / home indicator) */
+    #header-inner { padding:0 16px; padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right)) }
+    #main         { padding:14px 16px 32px; padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right)); padding-bottom:max(32px,env(safe-area-inset-bottom)) }
+    /* Add space at top for translucent status bar in standalone PWA mode */
+    #header-top   { padding-top:max(20px,env(safe-area-inset-top)); padding-bottom:10px; gap:10px }
+    #logo         { width:36px; height:36px; flex-shrink:0 }
+    #logo svg     { width:22px; height:22px }
+    #title        { font-size:18px; letter-spacing:0.06em }
+    #subtitle     { font-size:10px }
+    /* Hide the right-side header content on phone — too dense */
+    #header-strip { display:none !important }
+
+    /* Assumption strip (Find Best Price panel) — 3 columns × 2 rows on mobile */
+    .assumptions-strip { flex-wrap:wrap }
+    .assumption-item   { flex:1 1 30% !important; min-width:0; padding:8px 6px; border-right:none;
+                         border-bottom:1px solid rgba(255,255,255,0.05) }
+    .assumption-val    { font-size:14px }
+    .assumption-lbl    { font-size:9px }
+
+    /* Tabs scroll horizontally so all 4 fit comfortably */
+    #tabs { overflow-x:auto; -webkit-overflow-scrolling:touch; gap:4px; padding-bottom:2px;
+            scrollbar-width:none }
+    #tabs::-webkit-scrollbar { display:none }
+    .tab-btn { flex-shrink:0; padding:10px 14px; font-size:11px; min-height:44px }
+
+    /* Panels: less padding, fully fluid */
+    .panel { padding:14px 12px; border-radius:8px; margin-bottom:14px }
+    .section-lbl, .lbl { font-size:10px }
+
+    /* All multi-column grids collapse to single column */
+    .input-grid-calc, .pencil-row, .adv-panel.open, .quarries-top,
+    .site-controls, .quote-header-grid, .add-q-grid,
+    .add-mat-row, .stats-grid, .card-top {
+      grid-template-columns:1fr !important;
+      display:flex !important;
+      flex-direction:column;
+      gap:10px;
+      align-items:stretch
+    }
+    .stats-grid { display:grid !important; grid-template-columns:1fr 1fr !important }   /* keep 2-up for stat boxes */
+    .stat-box   { padding:10px 12px }
+    .stat-val   { font-size:18px }
+    .stat-lbl   { font-size:9px }
+
+    /* Form inputs — larger tap area, full width */
+    input, select, textarea, button {
+      font-size:16px !important;   /* iOS: 16px prevents zoom-on-focus */
+      min-height:44px;
+      width:100%;
+      box-sizing:border-box
+    }
+    .rate-input { min-height:38px }
+    .mat-name-input { font-size:14px !important; min-height:38px }
+
+    /* Buttons sit full-width and stack */
+    .primary-btn, .outline-btn, .red-btn {
+      width:100%; padding:12px 16px; min-height:48px; font-size:12px
+    }
+    .icon-btn { width:36px; min-height:36px; flex-shrink:0 }
+
+    /* Search results — stack each row vertically */
+    .results-hdr { display:none !important }   /* column headers don't fit; show inline labels instead */
+    .result-row {
+      grid-template-columns:1fr !important;
+      display:block !important;
+      padding:12px 14px !important;
+      margin-bottom:8px
+    }
+    .result-row > div { margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px }
+    .result-row > div:last-child { margin-bottom:0 }
+    .result-row > div:first-child { flex-direction:column; align-items:flex-start; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:8px; margin-bottom:8px }
+    .result-big { font-size:16px }
+    .result-sub { font-size:11px }
+    .result-chips { gap:4px }
+
+    /* Quarry-prices cards */
+    .materials-grid { grid-template-columns:1fr !important; gap:6px }
+    .mat-tile { padding:8px 12px; gap:6px }
+    .mat-tile.editing { flex-direction:column; align-items:stretch }
+    .mat-tile.editing .mat-rate { justify-content:flex-end }
+    .mat-name, .mat-name-input { word-break:break-word }
+    .card { padding:14px 12px }
+    .card-actions { width:100%; justify-content:flex-end }
+
+    /* Quote builder lines — single-column accordion-style */
+    .quote-line, .quote-line.custom {
+      grid-template-columns:1fr !important;
+      display:block !important;
+      padding:12px 14px !important;
+      margin-bottom:8px
+    }
+    .quote-line > div, .quote-line > input, .quote-line > select { margin-bottom:6px; width:100% }
+    .quote-line > input[type="checkbox"] { width:22px; height:22px; min-height:22px; display:inline-block; margin-right:8px }
+    .ql-name { font-size:14px }
+    .ql-canon, .ql-sub { font-size:11px }
+    .ql-quote { font-size:18px }
+    .ql-num { font-size:14px }
+    .site-summary { grid-template-columns:1fr 1fr !important; gap:10px; padding:14px }
+    .summary-val { font-size:18px }
+
+    /* Postcode warning banners — already responsive but tighten */
+    .pc-warn { padding:10px 12px; font-size:12px }
+
+    /* Chips row scrolls horizontally if needed */
+    .chips-row { flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px }
+    .chips-row::-webkit-scrollbar { display:none }
+
+    /* Long input rows in headers (e.g. quote customer/postcode) stack */
+    .pencil-row { flex-direction:column; align-items:stretch }
+  }
+
+  /* PWA standalone mode (when launched from Home Screen icon) */
+  @media (display-mode: standalone) {
+    body { /* slightly tighter — Safari chrome is gone */
+      -webkit-user-select:none;
+      -webkit-touch-callout:none;
+    }
+    /* Re-allow selection in inputs and result panels */
+    input, textarea, .result-row, .mat-tile, .quote-line, .panel {
+      -webkit-user-select:text;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<div id="header">
+  <div id="header-inner">
+    <div id="header-top">
+      <div id="logo">⛏</div>
+      <div>
+        <div id="title">Quarry Sourcing</div>
+        <div id="subtitle">Material &amp; Haulage Cost Engine</div>
+      </div>
+    </div>
+    <div id="tabs">
+      <button class="tab-btn active" data-tab="search" onclick="switchTab(event,'search')">🔍 Material Search</button>
+      <button class="tab-btn" data-tab="site" onclick="switchTab(event,'site')">📋 Quote Builder</button>
+      <button class="tab-btn" data-tab="quarries" onclick="switchTab(event,'quarries')">🏔 Quarry Prices</button>
+      <button class="tab-btn" data-tab="settings" onclick="switchTab(event,'settings')">⚙ Haulage Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MAIN ═══════ -->
+<div id="main">
+
+  <!-- ── Material Search Tab ── -->
+  <div id="tab-search" class="tab-panel active">
+
+    <div class="panel">
+      <span class="section-lbl">Find Best Price</span>
+      <div class="assumptions-strip">
+        <div class="assumption-item"><span class="assumption-val" id="ass-day">9hr</span><span class="assumption-lbl">Day length</span></div>
+        <div class="assumption-item"><span class="assumption-val" id="ass-load">20t</span><span class="assumption-lbl">Load</span></div>
+        <div class="assumption-item"><span class="assumption-val" id="ass-loadtime">10min</span><span class="assumption-lbl">Load/Tip</span></div>
+        <div class="assumption-item"><span class="assumption-val" id="ass-dayrate">£600</span><span class="assumption-lbl">Day rate</span></div>
+        <div class="assumption-item" title="Distance-tiered speed: ≤8mi=30mph, 8-20mi=40mph, >20mi=50mph"><span class="assumption-val" id="ass-speed">30/40/50</span><span class="assumption-lbl">Speed bands</span></div>
+        <div class="assumption-item"><span class="assumption-val" id="ass-buffer">+5</span><span class="assumption-lbl">Buffer</span></div>
+      </div>
+
+      <div class="input-grid-calc">
+        <div>
+          <span class="lbl">Material</span>
+          <select id="search-material"><option value="">-- choose material --</option></select>
+        </div>
+        <div>
+          <span class="lbl">Delivery Postcode</span>
+          <input id="search-postcode" type="text" placeholder="GL50 1AA" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')searchMaterial()">
+        </div>
+        <div>
+          <span class="lbl">Tonnes Needed</span>
+          <input id="search-tonnage" type="number" value="20" min="0.5" step="0.5">
+        </div>
+        <div>
+          <span class="lbl">Travel Override (min)</span>
+          <input id="search-travel-override" type="number" placeholder="auto" step="1">
+        </div>
+        <button class="primary-btn" onclick="searchMaterial()">Find Best</button>
+      </div>
+    </div>
+
+    <div id="search-results"></div>
+
+    <div class="empty" id="search-empty">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-title">Choose a material, enter the delivery postcode and click Find Best</div>
+      <div class="empty-sub">Compares all quarries supplying that material, ranked by delivered cost per tonne</div>
+    </div>
+  </div>
+
+  <!-- ── Quote Builder Tab ── -->
+  <div id="tab-site" class="tab-panel">
+
+    <div class="panel">
+      <span class="section-lbl">Quote Details</span>
+      <div class="quote-header-grid">
+        <div>
+          <span class="lbl">Quotation For (Customer)</span>
+          <input id="q-customer" type="text" placeholder="e.g. Collins Earthworks">
+        </div>
+        <div>
+          <span class="lbl">Delivery Site Name</span>
+          <input id="q-site-name" type="text" placeholder="e.g. Javelin Park EfW">
+        </div>
+        <div>
+          <span class="lbl">Delivery Address</span>
+          <input id="q-delivery-addr" type="text" placeholder="Full address">
+        </div>
+        <div>
+          <span class="lbl">Delivery Postcode</span>
+          <input id="q-postcode" type="text" placeholder="GL10 3ET" oninput="this.value=this.value.toUpperCase();" onchange="recalcQuote()">
+        </div>
+        <div>
+          <span class="lbl">Prepared By</span>
+          <input id="q-prepared-by" type="text" placeholder="Jordan Catto" value="Jordan Catto">
+        </div>
+        <div>
+          <span class="lbl">Email</span>
+          <input id="q-email" type="text" value="jordan@simsonaggregate.co.uk">
+        </div>
+        <div>
+          <span class="lbl">Telephone</span>
+          <input id="q-tel" type="text" value="01886 358 900">
+        </div>
+        <div>
+          <span class="lbl">Travel Override (min)</span>
+          <input id="q-travel-override" type="number" placeholder="auto" step="1" onchange="recalcQuote()">
+        </div>
+        <div>
+          <span class="lbl">Default Margin %</span>
+          <input id="q-default-margin" type="number" value="0" step="1" min="0" max="100" onchange="applyDefaultMargin()">
+        </div>
+        <div style="display:flex;align-items:end;gap:8px">
+          <button class="primary-btn" onclick="recalcQuote()" style="padding:10px 18px;font-size:12px">Recalculate</button>
+          <button class="outline-btn" onclick="resetQuote()" title="Reset all quote lines to defaults">↺ Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quote-lines-container">
+      <div class="ql-hdr">
+        <span class="hdr-lbl">Use</span>
+        <span class="hdr-lbl">Material (Quote Wording)</span>
+        <span class="hdr-lbl">Source Quarry</span>
+        <span class="hdr-lbl">Qty</span>
+        <span class="hdr-lbl">Unit</span>
+        <span class="hdr-lbl">Mat /t</span>
+        <span class="hdr-lbl">Haul /t</span>
+        <span class="hdr-lbl">Margin %</span>
+        <span class="hdr-lbl" style="text-align:right">Quote Price</span>
+      </div>
+      <div id="quote-lines"></div>
+      <button class="add-line-btn" onclick="addQuoteLine()">+ Add Custom Material Line</button>
+    </div>
+
+    <div class="site-summary" id="quote-summary" style="display:none">
+      <div>
+        <div class="summary-val" id="qsum-lines">—</div>
+        <div class="summary-lbl">Included Lines</div>
+      </div>
+      <div>
+        <div class="summary-val" id="qsum-cost">—</div>
+        <div class="summary-lbl">Avg Cost £/t</div>
+      </div>
+      <div>
+        <div class="summary-val" id="qsum-quote">—</div>
+        <div class="summary-lbl">Avg Quoted £/t</div>
+      </div>
+      <div>
+        <div class="summary-val" id="qsum-margin">—</div>
+        <div class="summary-lbl">Avg Margin</div>
+      </div>
+    </div>
+
+    <div class="export-row">
+      <button class="primary-btn" onclick="openPrintableQuote()">📄 Generate Quote Document</button>
+      <button class="outline-btn" onclick="exportQuoteCSV()">⬇ Export CSV</button>
+    </div>
+  </div>
+
+  <!-- ── Quarry Prices Tab ── -->
+  <div id="tab-quarries" class="tab-panel">
+    <div class="quarries-top">
+      <div class="quarries-top-left">
+        <span class="lbl">Quarry Material Prices</span>
+        <div class="quarries-top-sub">Edit collect rates · click Edit to add, remove, or rename materials · prices stored locally</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="outline-btn" onclick="toggleGrouping()">🔎 Material Grouping</button>
+        <button class="outline-btn" onclick="toggleAddQuarry()">+ Add Quarry</button>
+      </div>
+    </div>
+
+    <div id="grouping-panel" style="display:none" class="panel">
+      <span class="section-lbl">Material Grouping Check</span>
+      <div style="font-size:12px;color:#5a6970;font-family:Barlow,sans-serif;margin-bottom:14px;line-height:1.6">
+        This shows how the raw material names from each quarry are grouped into single options for the Search &amp; Quote tabs. If the same product appears under two different canonical names, edit the raw names (Edit button on each quarry) so they match. Names flagged <span style="color:#e0a030">⚠ only one quarry</span> are worth double-checking — they may be a misspelt variant of a more common material.
+      </div>
+      <div id="grouping-content"></div>
+    </div>
+
+    <div id="add-quarry-form" style="display:none" class="panel">
+      <span class="section-lbl">New Quarry</span>
+      <div class="add-q-grid">
+        <div><span class="lbl">Quarry Name *</span><input id="nq-name" placeholder="e.g. Stow Quarry"></div>
+        <div><span class="lbl">Postcode *</span><input id="nq-postcode" placeholder="GL54 1AA" oninput="this.value=this.value.toUpperCase()"></div>
+        <div><span class="lbl">Operator</span><input id="nq-operator" placeholder="Company name"></div>
+        <div><span class="lbl">Phone</span><input id="nq-phone" placeholder="01234 567890"></div>
+        <div style="grid-column:span 2"><span class="lbl">Notes</span><input id="nq-notes" placeholder="Location, hours etc." style="width:100%"></div>
+      </div>
+      <button class="primary-btn" onclick="saveNewQuarry()">Save Quarry</button>
+    </div>
+
+    <div id="quarry-cards"></div>
+  </div>
+
+  <!-- ── Haulage Settings Tab ── -->
+  <div id="tab-settings" class="tab-panel">
+    <div class="panel">
+      <span class="section-lbl">Haulage Calculation Settings</span>
+      <p style="font-size:13px;color:#7a8a92;font-family:'Barlow',sans-serif;margin-bottom:18px;line-height:1.6">
+        Logic from the V2 Haulage Calculator: <code style="background:#161b1e;padding:2px 6px;border-radius:4px;color:#00A8DA">trips = floor(dayMin / (travel×2 + loadTime×2))</code>, then <code style="background:#161b1e;padding:2px 6px;border-radius:4px;color:#00A8DA">£/tonne = (dayRate ÷ trips) ÷ loadSize</code>.<br>
+        One-way travel time is estimated from road distance ÷ average speed, or you can override it per query.
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px">
+        <div>
+          <span class="lbl">Day Rate (£)</span>
+          <input id="set-dayrate" type="number" value="600" min="1" onchange="saveSettings();refreshAssumptionStrip();onSettingsChanged()">
+        </div>
+        <div>
+          <span class="lbl">Day Length (hr)</span>
+          <input id="set-dayhours" type="number" value="9" min="1" max="24" onchange="saveSettings();refreshAssumptionStrip();onSettingsChanged()">
+        </div>
+        <div>
+          <span class="lbl">Load Size (t)</span>
+          <input id="set-load" type="number" value="20" min="1" onchange="saveSettings();refreshAssumptionStrip();onSettingsChanged()">
+        </div>
+        <div>
+          <span class="lbl">Load/Tip Each (min)</span>
+          <input id="set-loadtime" type="number" value="10" min="1" onchange="saveSettings();refreshAssumptionStrip();onSettingsChanged()">
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)">
+        <span class="lbl" style="color:#00A8DA;letter-spacing:0.18em">Distance Bands</span>
+        <p style="font-size:11px;color:#5a6970;font-family:'Barlow',sans-serif;line-height:1.6;margin:4px 0 12px">
+          Different journey lengths use different road characteristics. Short trips wind through lanes; long trips are mostly motorway. Each band has its own road factor (multiplier on straight-line distance) and average lorry speed.
+        </p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;font-size:12px;font-family:'Barlow',sans-serif;color:#7a8a92;margin-bottom:6px;padding:0 6px">
+          <span>Band</span><span>Up to (straight mi)</span><span>Road Factor</span><span>Speed (mph)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:6px;align-items:center">
+          <div style="font-size:12px;color:#e8eaeb;font-weight:600;padding:0 6px">🛣 Lanes</div>
+          <input id="band-short-max" type="number" value="4"   min="1" max="50" onchange="saveBands()" style="width:100%">
+          <input id="band-short-factor" type="number" value="1.50" min="1" max="3" step="0.05" onchange="saveBands()" style="width:100%">
+          <input id="band-short-speed" type="number" value="22" min="10" max="80" onchange="saveBands()" style="width:100%">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:6px;align-items:center">
+          <div style="font-size:12px;color:#e8eaeb;font-weight:600;padding:0 6px">🛤 A-roads</div>
+          <input id="band-med-max" type="number" value="18" min="1" max="100" onchange="saveBands()" style="width:100%">
+          <input id="band-med-factor" type="number" value="1.45" min="1" max="3" step="0.05" onchange="saveBands()" style="width:100%">
+          <input id="band-med-speed" type="number" value="38" min="10" max="80" onchange="saveBands()" style="width:100%">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;align-items:center">
+          <div style="font-size:12px;color:#e8eaeb;font-weight:600;padding:0 6px">🚛 Motorway</div>
+          <input type="text" value="any" disabled style="width:100%;background:#161b1e;color:#5a6970;text-align:center">
+          <input id="band-long-factor" type="number" value="1.20" min="1" max="3" step="0.05" onchange="saveBands()" style="width:100%">
+          <input id="band-long-speed" type="number" value="40" min="10" max="80" onchange="saveBands()" style="width:100%">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:14px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div>
+          <span class="lbl">Lorry Buffer (min)</span>
+          <input id="set-buffer" type="number" value="5" min="0" max="20" onchange="saveSettings();refreshAssumptionStrip();onSettingsChanged()">
+        </div>
+        <div>
+          <span class="lbl">Snap-down Threshold (min)</span>
+          <input id="set-snap" type="number" value="2" min="0" max="10" onchange="saveSettings();onSettingsChanged()">
+        </div>
+        <div style="display:flex;align-items:end">
+          <p style="font-size:11px;color:#5a6970;font-family:'Barlow',sans-serif;line-height:1.5;margin:0">
+            <strong style="color:#7a8a92">Buffer:</strong> mins added to car drive time (lorries are slower).<br>
+            <strong style="color:#7a8a92">Snap-down:</strong> if travel falls within N mins of dropping to a cheaper trip band, snap down to grab the extra trip per day (e.g. 35min → 34min keeps 6 trips instead of 5).
+          </p>
+        </div>
+      </div>
+
+      <p style="font-size:11px;color:#5a6970;font-family:'Barlow',sans-serif;margin-top:18px;line-height:1.7">
+        <strong style="color:#7a8a92">Pipeline:</strong> straight-line distance → pick band → road = straight × factor → car min = road ÷ speed → + lorry buffer → snap-down if within threshold.<br>
+        Use the "Travel Override" field on Search or Quote Builder to skip the auto-pipeline entirely and use a known exact time.<br>
+        <strong style="color:#7a8a92">Round-trip time:</strong> 2× travel (collect+return) + 2× load/tip. Settings persist in browser local storage.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  DATA — from your Pricing_Input.xlsx
+// ═══════════════════════════════════════════════
+let quarries = [
+  { id:1, name:"Wickwar Quarry", operator:"Breedon Group", postcode:"GL12 8LF",
+    phone:"01454 294100", notes:"The Downs, Wickwar — asphalt & concrete plant on site",
+    materials:["Quarried Type 1","Quarried 6F5","Quarried 2/6mm","Quarried 10mm Clean","14mm Clean","Quarried 20mm Clean","Quarried 20/4mm","Quarried 40mm Clean","MLS Type 1","MLS 6F5"],
+    collectRates:{"Quarried Type 1":13.30,"Quarried 6F5":0,"Quarried 2/6mm":18.55,"Quarried 10mm Clean":18.55,"14mm Clean":18.55,"Quarried 20mm Clean":18.55,"Quarried 20/4mm":17.55,"Quarried 40mm Clean":18.55,"MLS Type 1":8.55,"MLS 6F5":0} },
+
+  { id:2, name:"Tytherington Quarry", operator:"Heidelberg Materials UK", postcode:"GL12 8UW",
+    phone:"0330 123 0763", notes:"Tytherington — alternates Sat with Chipping Sodbury",
+    materials:["Quarried Type 1","Quarried 6F5","Quarried 2/6mm","Quarried 10mm Clean","Quarried 20mm Clean","Quarried 20/4mm"],
+    collectRates:{"Quarried Type 1":14.65,"Quarried 6F5":14.57,"Quarried 2/6mm":19.07,"Quarried 10mm Clean":21.02,"Quarried 20mm Clean":21.02,"Quarried 20/4mm":21.02} },
+
+  { id:3, name:"Freemans Quarry", operator:"Freemans", postcode:"BS48 3XB",
+    phone:"", notes:"Backwell, North Somerset",
+    materials:["Quarried Type 1","Quarried 6F5","Quarried 10mm Clean","14mm Clean","Quarried 20mm Clean","Quarried 40mm Clean","MLS Type 1","MLS 6F5"],
+    collectRates:{"Quarried Type 1":12.05,"Quarried 6F5":9.60,"Quarried 10mm Clean":20.05,"14mm Clean":20.05,"Quarried 20mm Clean":20.05,"Quarried 40mm Clean":18.20,"MLS Type 1":8.10,"MLS 6F5":7.60} },
+
+  { id:4, name:"Daglingworth Quarry", operator:"Heritage Quarries", postcode:"GL7 7JB",
+    phone:"", notes:"Gloucester Road, Daglingworth — operated by Heritage Quarries",
+    materials:["Quarried Type 1","Quarried 6F5","Quarried Type 3","Quarried 10mm Clean","Quarried 20mm Clean","Quarried 20/4mm","Quarried 40mm Clean","Quarried 75mm Clean","75/150mm","600 Series"],
+    collectRates:{"Quarried Type 1":13.80,"Quarried 6F5":12.30,"Quarried Type 3":13.80,"Quarried 10mm Clean":16.40,"Quarried 20mm Clean":16.40,"Quarried 20/4mm":16.40,"Quarried 40mm Clean":16.40,"Quarried 75mm Clean":16.40,"75/150mm":16.40,"600 Series":16.40} },
+
+  { id:5, name:"Naunton Quarry", operator:"Breedon Group", postcode:"GL54 3BA",
+    phone:"01451 850555", notes:"Naunton, North Cotswolds",
+    materials:["Quarried Type 1","Quarried 6F5","Quarried 10mm Clean","Quarried 20mm Clean","Quarried 20/4mm","Quarried 40mm Clean","Fill Sand"],
+    collectRates:{"Quarried Type 1":10.95,"Quarried 6F5":9.95,"Quarried 10mm Clean":21.05,"Quarried 20mm Clean":21.40,"Quarried 20/4mm":21.35,"Quarried 40mm Clean":21.35,"Fill Sand":11.05} },
+
+  { id:6, name:"Guiting Quarry", operator:"Johnston Quarry Group", postcode:"GL54 5SB",
+    phone:"01451 600670", notes:"Upper Coscombe, Temple Guiting",
+    materials:["Quarried 6F5","Quarried 10mm Clean","Quarried 20mm Clean","Quarried 40mm Clean","Quarried 75mm Clean","Fill Sand"],
+    collectRates:{"Quarried 6F5":9.50,"Quarried 10mm Clean":19.50,"Quarried 20mm Clean":19.50,"Quarried 40mm Clean":15.50,"Quarried 75mm Clean":15.50,"Fill Sand":8.00} },
+
+  { id:7, name:"Pencroft", operator:"Pencroft", postcode:"WR13 5EQ",
+    phone:"", notes:"Recycled materials — Malvern area",
+    materials:["Type 1 Recycled","Recycled 6F5","10mm Recycled Gravel","20mm Recycled Gravel","Recycled 75/40mm","Sharp Sand","Fill Sand"],
+    collectRates:{"Type 1 Recycled":8.00,"Recycled 6F5":5.00,"10mm Recycled Gravel":14.00,"20mm Recycled Gravel":14.00,"Recycled 75/40mm":12.00,"Sharp Sand":7.00,"Fill Sand":5.00} },
+
+  { id:8, name:"Allstone Gloucester", operator:"Allstone", postcode:"GL1 3QD",
+    phone:"01452 522751", notes:"Myers Road, Gloucester — recycled materials",
+    materials:["Type 1 Recycled","10mm Recycled Gravel","20mm Recycled Gravel","40mm Recycled Gravel","Recycled 75/40mm","Sharp Sand","Building Sand","BS3882 Topsoil"],
+    collectRates:{"Type 1 Recycled":14.30,"10mm Recycled Gravel":19.80,"20mm Recycled Gravel":19.25,"40mm Recycled Gravel":18.70,"Recycled 75/40mm":18.15,"Sharp Sand":23.10,"Building Sand":18.15,"BS3882 Topsoil":28.60} },
+
+  { id:9, name:"Chipping Sodbury Quarry", operator:"Heidelberg Materials UK", postcode:"BS37 7UU",
+    phone:"0330 123 0763", notes:"Wickwar Road, Chipping Sodbury",
+    materials:["Quarried Type 1","Quarried Type 3","Quarried 2/6mm","Quarried 10mm Clean","Quarried 20mm Clean","Quarried 40mm Clean"],
+    collectRates:{"Quarried Type 1":14.57,"Quarried Type 3":18.57,"Quarried 2/6mm":19.57,"Quarried 10mm Clean":21.07,"Quarried 20mm Clean":21.07,"Quarried 40mm Clean":21.07} },
+];
+
+// ═══════════════════════════════════════════════
+//  MATERIAL CANONICALIZATION
+//  Different quarries spell the same material in different ways.
+//  We map every original name to a single "canonical" name so the
+//  dropdown shows one entry per material, but searches still find
+//  every quarry's version of it.
+// ═══════════════════════════════════════════════
+
+// Manual overrides for special / non-pattern names.
+// Keys are lowercase trimmed original names; values are canonical.
+const MATERIAL_ALIASES = {
+  // ── Condensed canonical naming (2026-06 refresh) ──
+  // These take priority. Both Wickwar and Freemans use "14mm Clean" literally
+  // for their 6/14mm graded product — preserve that wording rather than the
+  // range form, and keep "Quarried X" / recycled wordings as final canonicals.
+  "14mm clean":                          "14mm Clean",
+  "quarried type 1":                     "Quarried Type 1",
+  "quarried type 3":                     "Quarried Type 3",
+  "quarried 6f5":                        "Quarried 6F5",
+  "quarried 2/6mm":                      "Quarried 2/6mm",
+  "quarried 20/4mm":                     "Quarried 20/4mm",
+  "quarried 10mm clean":                 "Quarried 10mm Clean",
+  "quarried 20mm clean":                 "Quarried 20mm Clean",
+  "quarried 40mm clean":                 "Quarried 40mm Clean",
+  "quarried 75mm clean":                 "Quarried 75mm Clean",
+  "mls type 1":                          "MLS Type 1",
+  "mls 6f5":                             "MLS 6F5",
+  "type 1 recycled":                     "Type 1 Recycled",
+  "recycled 6f5":                        "Recycled 6F5",
+  "recycled 75/40mm":                    "Recycled 75/40mm",
+  "10mm recycled gravel":                "10mm Recycled Gravel",
+  "20mm recycled gravel":                "20mm Recycled Gravel",
+  "40mm recycled gravel":                "40mm Recycled Gravel",
+  "sharp sand":                          "Sharp Sand",
+  "building sand":                       "Building Sand",
+  "bs3882 topsoil":                      "BS3882 Topsoil",
+
+  // ── Legacy mappings (kept for backward compatibility) ──
+  // Type 1 family (manufactured limestone — keep separate from plain Type 1)
+  "t1 manufactured limestone":           "MLS Type 1",
+  "type 1 manufactured limestone":       "MLS Type 1",
+  "t1 mls":                              "MLS Type 1",
+  "type 1 mls":                          "MLS Type 1",
+
+  // 6F5 family
+  "6f5 manufactured limestone":          "MLS 6F5",
+  "6f5 mls":                             "MLS 6F5",
+  "6f5 ecomix":                          "6F5 Ecomix",
+  "6f5":                                 "Quarried 6F5",
+  // "(no stock)" variants — strip the suffix and treat as base 6F5
+  "6f5 (no stock":                       "Quarried 6F5",
+  "6f5 (no stock)":                      "Quarried 6F5",
+  "6f5 manufactured limestone (no stock)":"MLS 6F5",
+
+  // Type 1 variants
+  "type 1":                              "Quarried Type 1",
+  "type 1 ecoblend":                     "Type 1 ECOBLEND",
+  "recycled type 1":                     "Type 1 Recycled",
+  "type 3":                              "Quarried Type 3",
+
+  // Sands
+  "fill sand":                           "Fill Sand",
+  "unscreened fill sand":                "Unscreened Fill Sand",
+  "sharp sand":                          "Sharp Sand",
+  "recycled sharp sand":                 "Recycled Sharp Sand",
+  "0/2mm screened sand":                 "Screened Sand 0/2mm",
+  "screened sand":                       "Screened Sand 0/2mm",
+
+  // Misc decorative / special (no size in name — keep as-is)
+  "topsoil":                             "Topsoil",
+  "red screened":                        "Red Screened",
+  "gold path":                           "Gold Path",
+  "600 series":                          "600 Series",
+
+  // W-grade walling stone (Guiting)
+  "w75":                                 "W75",
+  "w150":                                "W150",
+};
+
+// Suffixes meaning "washed single-size product" — these all denote the same
+// thing for sourcing purposes (a clean material of a single nominal size).
+// e.g. "10mm Pipe Bedding" = "10mm Chippings" = "10mm Clean" = "10mm Gravel"
+//    = "10mm Stone" = the standard 4/10mm bracket.
+// NOTE: "Down" is excluded — "20mm Down" means 0-to-20 (a graded fill product),
+// handled separately further down.
+const WASHED_SUFFIXES = /\s+(pipe\s+bedding|chippings?|chips|clean(?:\s+stone)?|gravel|stone)$/i;
+
+// Standard UK aggregate sieve sizes (mm) — used for snapping fuzzy values
+// like 6.3 -> 6, 2.5 -> 2.
+const STANDARD_SIEVES = [0, 2, 4, 6, 10, 14, 20, 40, 63, 75, 80, 150];
+
+// Rounding rules for sieve numbers — anything within tolerance maps to standard
+// e.g. 6.3 -> 6, 6.2 -> 6
+function roundSieve(n) {
+  let best = n, bestDiff = Infinity;
+  STANDARD_SIEVES.forEach(s => {
+    const d = Math.abs(s - n);
+    if (d < bestDiff) { bestDiff = d; best = s; }
+  });
+  // only snap if within 1.0 of a standard size
+  return bestDiff <= 1.0 ? best : Math.round(n);
+}
+
+// When a quarry quotes a single size like "10mm", they almost always mean the
+// upper bound of a standard aggregate bracket. These are the conventional UK
+// brackets — the lower bound is what gets sieved out, the upper is what's named.
+const SINGLE_SIZE_BRACKETS = {
+   2: "0/2mm",
+   4: "0/4mm",
+   6: "2/6mm",
+  10: "4/10mm",
+  14: "6/14mm",
+  20: "10/20mm",
+  40: "20/40mm",
+  63: "40/63mm",
+  75: "40/75mm",
+  80: "40/80mm",
+  150: "75/150mm",
+};
+function bracketForSingleSize(upper) {
+  return SINGLE_SIZE_BRACKETS[upper] || null;
+}
+
+/**
+ * Canonicalize a material name.
+ * 0. Strip washed-product suffixes (Pipe Bedding, Chippings, Clean, Gravel, Stone)
+ *    from sized materials — they all mean the same thing.
+ * 1. Check the manual alias table first (lowercase, trimmed).
+ * 2. Try to detect sized aggregate patterns like "2/6.3mm", "10-20mm",
+ *    "10 to 20 mil", "20mm Down" and normalise to "low/high mm".
+ * 3. Handle "Recycled <size>" patterns.
+ * 4. Handle bare single-size "Nmm" by mapping to its standard bracket.
+ * 5. Fall back to title-cased original.
+ */
+function canonicalize(raw) {
+  if (!raw) return '';
+  const trimmed = String(raw).trim();
+  let key = trimmed.toLowerCase();
+
+  // 0a. Early alias check — before suffix stripping — so explicit final-canonical
+  //     wordings like "14mm Clean" or "Quarried Type 1" win without being
+  //     mangled by the washed-suffix stripper.
+  if (MATERIAL_ALIASES[key] !== undefined) return MATERIAL_ALIASES[key];
+
+  // 0b. Strip "Quarried" / "Q " prefix so legacy names like "Quarried 4/10mm"
+  //     fold back to "4/10mm" for matching. The condensed canonicals like
+  //     "Quarried 10mm Clean" were already caught by the early alias check.
+  key = key.replace(/^quarried\s+/i, '').replace(/^q\s+(?=type|6f5|\d)/i, '').trim();
+
+  // 0c. Strip washed-product suffixes when the rest of the name still starts
+  //    with a size (digit). This converts "10mm Pipe Bedding" → "10mm",
+  //    "20mm Chippings" → "20mm", "40mm Clean Stone" → "40mm".
+  //    We only strip when the prefix looks like a size, so plain words like
+  //    "Red Screened" or "Gold Path" aren't affected.
+  if (/^\d/.test(key) && WASHED_SUFFIXES.test(key)) {
+    key = key.replace(WASHED_SUFFIXES, '').trim();
+  }
+
+  // 1. Manual aliases (again, after stripping)
+  if (MATERIAL_ALIASES[key] !== undefined) return MATERIAL_ALIASES[key];
+
+  // 2. Recycled <range> pattern (Recycled 4/10mm, Recycled 10-20mm)
+  const recycledSized = key.match(/^recycled\s+(\d+(?:\.\d+)?)\s*(?:\/|-|to|–)\s*(\d+(?:\.\d+)?)\s*m(?:m|il)?$/i);
+  if (recycledSized) {
+    const lo = roundSieve(parseFloat(recycledSized[1]));
+    const hi = roundSieve(parseFloat(recycledSized[2]));
+    return `Recycled ${lo}/${hi}mm`;
+  }
+
+  // Recycled <single size> — also expand to its standard bracket
+  // e.g. "Recycled 10mm" -> "Recycled 4/10mm", "Recycled 20mm" -> "Recycled 10/20mm"
+  const recycledSingle = key.match(/^recycled\s+(\d+(?:\.\d+)?)\s*m(?:m|il)?(?:\s|$)/i);
+  if (recycledSingle) {
+    const hi = roundSieve(parseFloat(recycledSingle[1]));
+    const bracket = bracketForSingleSize(hi);
+    return bracket ? `Recycled ${bracket}` : `Recycled ${hi}mm`;
+  }
+
+  const recycledNamed = key.match(/^recycled\s+(type\s*1|6f5|sharp\s+sand|fill\s+sand)$/i);
+  if (recycledNamed) {
+    const base = recycledNamed[1].toLowerCase().replace(/\s+/g,' ');
+    if (base === 'type 1') return 'Recycled Type 1';
+    if (base === '6f5')    return 'Recycled 6F5';
+    if (base === 'sharp sand') return 'Recycled Sharp Sand';
+    if (base === 'fill sand')  return 'Recycled Fill Sand';
+  }
+
+  // 3. Sized aggregate "lo/hi mm" with separators / or - or "to"
+  //    handles "2/6.3mm", "10-20mm", "10 to 63mm", "10/63 mm", "2 to 6 mil"
+  const sized = key.match(/^(\d+(?:\.\d+)?)\s*(?:\/|-|to|–)\s*(\d+(?:\.\d+)?)\s*m(?:m|il)?(?:\s|$)/i);
+  if (sized) {
+    const lo = roundSieve(parseFloat(sized[1]));
+    const hi = roundSieve(parseFloat(sized[2]));
+    return `${lo}/${hi}mm`;
+  }
+
+  // 4a. Single-size patterns: "20mm Down", "40mm down", "0/40mm C Run"
+  //     "<n>mm Down" -> "0/<n>mm" (Down meaning 0-to-n, all the fines included)
+  const downMatch = key.match(/^(\d+(?:\.\d+)?)\s*mm\s+down$/i);
+  if (downMatch) {
+    const hi = roundSieve(parseFloat(downMatch[1]));
+    return `0/${hi}mm`;
+  }
+  // "0/<n>mm C Run" -> "0/<n>mm"
+  const cRun = key.match(/^0\s*\/\s*(\d+)\s*mm\s+c\s+run$/i);
+  if (cRun) return `0/${roundSieve(parseFloat(cRun[1]))}mm`;
+
+  // 4b. Bare single-size "10mm" / "20mm" / "40mm" — after step 0, anything
+  //     like "10mm Pipe Bedding" or "20mm Chippings" has already been
+  //     stripped to "10mm"/"20mm" and lands here. Expand to the standard
+  //     bracket: 10mm → 4/10mm, 20mm → 10/20mm, 40mm → 20/40mm.
+  const bareSingle = key.match(/^(\d+(?:\.\d+)?)\s*m(?:m|il)?$/i);
+  if (bareSingle) {
+    const hi = roundSieve(parseFloat(bareSingle[1]));
+    const bracket = bracketForSingleSize(hi);
+    if (bracket) return bracket;
+    return `${hi}mm`; // unusual size, keep as-is
+  }
+
+  // 5. Fallback: title-case the original
+  return trimmed.replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// Approximate coordinates for known postcodes
+const POSTCODE_COORDS = {
+  "GL12 8LF":{lat:51.5894,lng:-2.3536}, // Wickwar quarry, The Downs
+  "GL12 8UW":{lat:51.6100,lng:-2.4600}, // Tytherington
+  "GL12 8LB":{lat:51.6280,lng:-2.3920}, // Freemans (legacy, kept for backward compat)
+  "BS48 3XB":{lat:51.4100,lng:-2.7100}, // Freemans Quarry, Backwell, North Somerset
+  "GL7 7JB" :{lat:51.7542,lng:-2.0000}, // Daglingworth
+  "GL54 3BA":{lat:51.9167,lng:-1.8167}, // Naunton
+  "GL54 5SB":{lat:51.9450,lng:-1.8350}, // Guiting
+  "WR13 5EQ":{lat:52.1150,lng:-2.3340}, // Pencroft, Leigh Sinton / Malvern area
+  "GL1 3QD" :{lat:51.8667,lng:-2.2333}, // Allstone Gloucester
+  "BS37 7UU":{lat:51.5600,lng:-2.3800}, // Chipping Sodbury
+};
+
+const DISTRICT_FALLBACKS = {
+  GL54:{lat:51.92,lng:-1.83}, GL52:{lat:51.95,lng:-2.06}, GL51:{lat:51.90,lng:-2.12},
+  GL50:{lat:51.90,lng:-2.07}, GL53:{lat:51.89,lng:-2.09}, GL1:{lat:51.87,lng:-2.24},
+  GL2:{lat:51.87,lng:-2.27},  GL3:{lat:51.87,lng:-2.18},  GL4:{lat:51.85,lng:-2.20},
+  GL7:{lat:51.72,lng:-1.97},  GL11:{lat:51.70,lng:-2.38}, GL12:{lat:51.63,lng:-2.39},
+  GL16:{lat:51.78,lng:-2.57}, BS37:{lat:51.54,lng:-2.38}, BS36:{lat:51.54,lng:-2.45},
+  BS32:{lat:51.55,lng:-2.55}, BS48:{lat:51.42,lng:-2.71}, BS40:{lat:51.38,lng:-2.71},
+  BS49:{lat:51.39,lng:-2.81}, BS35:{lat:51.61,lng:-2.55}, GL56:{lat:51.99,lng:-1.73}, GL55:{lat:52.02,lng:-1.83},
+  GL8:{lat:51.65,lng:-2.15},  GL6:{lat:51.73,lng:-2.19},  GL5:{lat:51.74,lng:-2.20},
+  GL10:{lat:51.74,lng:-2.27}, GL13:{lat:51.66,lng:-2.45}, GL14:{lat:51.83,lng:-2.42},
+  GL15:{lat:51.74,lng:-2.55}, GL17:{lat:51.85,lng:-2.55}, GL18:{lat:51.95,lng:-2.45},
+  GL19:{lat:51.95,lng:-2.30}, GL20:{lat:52.00,lng:-2.16},
+  WR1:{lat:52.19,lng:-2.22},  WR2:{lat:52.19,lng:-2.25},  WR3:{lat:52.21,lng:-2.21},
+  WR4:{lat:52.21,lng:-2.18},  WR5:{lat:52.18,lng:-2.21},  WR6:{lat:52.245,lng:-2.353},
+  WR7:{lat:52.16,lng:-2.07},  WR8:{lat:52.10,lng:-2.21},  WR9:{lat:52.267,lng:-2.155},
+  WR10:{lat:52.11,lng:-2.07}, WR11:{lat:52.092,lng:-1.947}, WR12:{lat:52.038,lng:-1.861},
+  WR13:{lat:52.09,lng:-2.34}, WR14:{lat:52.11,lng:-2.32}, WR15:{lat:52.30,lng:-2.55},
+  // Herefordshire (HR1-HR9) — full coverage. Hereford-area deliveries were
+  // previously falling back to the Gloucester default, throwing out the
+  // Pencroft (Malvern) mileage. Coordinates are the district town centres.
+  HR1:{lat:52.0567,lng:-2.7160}, // Hereford city
+  HR2:{lat:52.0100,lng:-2.7400}, // South Hereford
+  HR3:{lat:52.0760,lng:-3.1230}, // Hay-on-Wye
+  HR4:{lat:52.0900,lng:-2.8000}, // North Hereford / Kings Acre
+  HR5:{lat:52.2040,lng:-3.0290}, // Kington
+  HR6:{lat:52.2270,lng:-2.7390}, // Leominster
+  HR7:{lat:52.1900,lng:-2.5050}, // Bromyard
+  HR8:{lat:52.0350,lng:-2.4250}, // Ledbury (corrected)
+  HR9:{lat:51.9130,lng:-2.5870}, // Ross-on-Wye
+  OX18:{lat:51.78,lng:-1.65}, OX7:{lat:51.88,lng:-1.55},
+  SN6:{lat:51.68,lng:-1.79},  SN7:{lat:51.65,lng:-1.55},
+};
+
+// Finer-grained sector fallbacks (outward + first inward digit, e.g. "GL6 7").
+// Used when a full postcode isn't in POSTCODE_COORDS but the wider district
+// covers a large area with very different sub-areas (e.g. GL6 spans low-lying
+// Stroud-Painswick AND the hill-climb Bisley-Eastcombe direction).
+const SECTOR_FALLBACKS = {
+  // GL6 — Stroud / Painswick (west, lower) vs Bisley / Eastcombe (east, hills)
+  'GL6 0': {lat:51.69, lng:-2.22}, // Nailsworth direction
+  'GL6 6': {lat:51.78, lng:-2.20}, // Painswick
+  'GL6 7': {lat:51.735,lng:-2.16}, // Bisley, Eastcombe, Chalford Hill — adds climb
+  'GL6 8': {lat:51.73, lng:-2.14}, // Chalford, Bussage, Brownshill
+  'GL6 9': {lat:51.66, lng:-2.18}, // Box, Forwood (Minchinhampton/Nailsworth)
+  // GL4 — Gloucester east vs Painswick/Whaddon (south)
+  'GL4 8': {lat:51.84, lng:-2.18}, // Tuffley/Painswick edge
+};
+
+// ═══════════════════════════════════════════════
+//  SETTINGS (persisted in localStorage)
+// ═══════════════════════════════════════════════
+let settings = {
+  dayRate: 600,
+  dayHours: 9,
+  loadSize: 20,
+  loadTime: 10,
+  avgSpeed: 35,
+  lorryBuffer: 5,  // mins added on top of car time (lorries are slower than the speed estimate)
+  snapThreshold: 2, // if travel is within N mins of dropping to a cheaper trip band, snap down
+};
+
+function loadSettings() {
+  try {
+    const s = localStorage.getItem('qss-settings');
+    if(s) Object.assign(settings, JSON.parse(s));
+  } catch(e){}
+  document.getElementById('set-dayrate').value = settings.dayRate;
+  document.getElementById('set-dayhours').value = settings.dayHours;
+  document.getElementById('set-load').value = settings.loadSize;
+  document.getElementById('set-loadtime').value = settings.loadTime;
+  document.getElementById('set-buffer').value = settings.lorryBuffer;
+  document.getElementById('set-snap').value = settings.snapThreshold;
+
+  // load saved bands if present
+  try {
+    const b = localStorage.getItem('qss-bands');
+    if (b) {
+      const saved = JSON.parse(b);
+      if (Array.isArray(saved) && saved.length === 3) {
+        DISTANCE_BANDS[0].maxStraightMi = saved[0].maxStraightMi;
+        DISTANCE_BANDS[0].roadFactor    = saved[0].roadFactor;
+        DISTANCE_BANDS[0].speed         = saved[0].speed;
+        DISTANCE_BANDS[1].maxStraightMi = saved[1].maxStraightMi;
+        DISTANCE_BANDS[1].roadFactor    = saved[1].roadFactor;
+        DISTANCE_BANDS[1].speed         = saved[1].speed;
+        DISTANCE_BANDS[2].roadFactor    = saved[2].roadFactor;
+        DISTANCE_BANDS[2].speed         = saved[2].speed;
+      }
+    }
+  } catch(e){}
+  // reflect bands in UI inputs
+  document.getElementById('band-short-max').value    = DISTANCE_BANDS[0].maxStraightMi;
+  document.getElementById('band-short-factor').value = DISTANCE_BANDS[0].roadFactor;
+  document.getElementById('band-short-speed').value  = DISTANCE_BANDS[0].speed;
+  document.getElementById('band-med-max').value      = DISTANCE_BANDS[1].maxStraightMi;
+  document.getElementById('band-med-factor').value   = DISTANCE_BANDS[1].roadFactor;
+  document.getElementById('band-med-speed').value    = DISTANCE_BANDS[1].speed;
+  document.getElementById('band-long-factor').value  = DISTANCE_BANDS[2].roadFactor;
+  document.getElementById('band-long-speed').value   = DISTANCE_BANDS[2].speed;
+
+  // load quarry overrides
+  try {
+    const q = localStorage.getItem('qss-quarries');
+    if(q) {
+      const saved = JSON.parse(q);
+      if(Array.isArray(saved) && saved.length) quarries = saved;
+    }
+  } catch(e){}
+}
+
+function saveSettings() {
+  settings.dayRate     = parseFloat(document.getElementById('set-dayrate').value)||600;
+  settings.dayHours    = parseFloat(document.getElementById('set-dayhours').value)||9;
+  settings.loadSize    = parseFloat(document.getElementById('set-load').value)||20;
+  settings.loadTime    = parseFloat(document.getElementById('set-loadtime').value)||10;
+  settings.lorryBuffer = parseFloat(document.getElementById('set-buffer').value);
+  if (isNaN(settings.lorryBuffer)) settings.lorryBuffer = 5;
+  settings.snapThreshold = parseFloat(document.getElementById('set-snap').value);
+  if (isNaN(settings.snapThreshold)) settings.snapThreshold = 2;
+  localStorage.setItem('qss-settings', JSON.stringify(settings));
+}
+
+function saveBands() {
+  DISTANCE_BANDS[0].maxStraightMi = parseFloat(document.getElementById('band-short-max').value) || 8;
+  DISTANCE_BANDS[0].roadFactor    = parseFloat(document.getElementById('band-short-factor').value) || 1.60;
+  DISTANCE_BANDS[0].speed         = parseFloat(document.getElementById('band-short-speed').value) || 30;
+  DISTANCE_BANDS[1].maxStraightMi = parseFloat(document.getElementById('band-med-max').value) || 20;
+  DISTANCE_BANDS[1].roadFactor    = parseFloat(document.getElementById('band-med-factor').value) || 1.30;
+  DISTANCE_BANDS[1].speed         = parseFloat(document.getElementById('band-med-speed').value) || 40;
+  DISTANCE_BANDS[2].roadFactor    = parseFloat(document.getElementById('band-long-factor').value) || 1.10;
+  DISTANCE_BANDS[2].speed         = parseFloat(document.getElementById('band-long-speed').value) || 50;
+  localStorage.setItem('qss-bands', JSON.stringify(DISTANCE_BANDS));
+  onSettingsChanged();
+}
+
+function saveQuarries() {
+  localStorage.setItem('qss-quarries', JSON.stringify(quarries));
+}
+
+// Called whenever a haulage-relevant setting changes — re-renders open views
+function onSettingsChanged() {
+  if (typeof renderQuote === 'function') renderQuote();
+  // search results don't auto-refresh; user clicks Find Best again
+}
+
+function refreshAssumptionStrip() {
+  document.getElementById('ass-day').textContent = settings.dayHours+'hr';
+  document.getElementById('ass-load').textContent = settings.loadSize+'t';
+  document.getElementById('ass-loadtime').textContent = settings.loadTime+'min';
+  document.getElementById('ass-dayrate').textContent = '£'+settings.dayRate;
+  // ass-speed is now static "30/40/50" set in HTML — bands are not user-tunable
+  const bufEl = document.getElementById('ass-buffer');
+  if (bufEl) bufEl.textContent = '+'+settings.lorryBuffer+'min';
+}
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentMaterialFilter = 'All';
+let editingQuarryId = null;
+let addQuarryOpen = false;
+let nextId = 100;
+let quoteLines = []; // {id, simsonName, canonical, qty, unit, included, manualSource, marginPct, isCustom}
+let nextLineId = 1;
+
+// ═══════════════════════════════════════════════
+//  MATHS
+// ═══════════════════════════════════════════════
+function parsePostcode(pc) {
+  pc = pc.toUpperCase().trim().replace(/\s{2,}/g,' ');
+  if (POSTCODE_COORDS[pc]) return POSTCODE_COORDS[pc];
+  // Try sector match (outward + first inward digit, e.g. "GL6 7"):
+  // this lets us split big districts whose sub-areas are geographically very
+  // different (Stroud-Painswick vs Bisley-Eastcombe both sit in GL6).
+  const parts = pc.split(' ');
+  if (parts.length === 2 && parts[1].length >= 1) {
+    const sector = parts[0] + ' ' + parts[1][0];
+    if (SECTOR_FALLBACKS[sector]) return SECTOR_FALLBACKS[sector];
+  }
+  const dist = parts[0];
+  return DISTRICT_FALLBACKS[dist] || {lat:51.87,lng:-2.24};
+}
+function haversineKm(lat1,lng1,lat2,lng2) {
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+/**
+ * Distance-tiered model for road distance and travel time.
+ * UK driving has very different characteristics by journey length:
+ *  - Short trips (≤8mi straight) usually involve country lanes that wind
+ *    significantly and are speed-limited to 30-50 mph
+ *  - Medium trips (8-20mi straight) mix A-roads and lanes
+ *  - Long trips (>20mi straight) are usually motorway/dual-carriageway
+ *    dominant, where the road is straighter than crow-fly through hills
+ *    and average speed is much higher
+ *
+ * Bands are applied to the STRAIGHT-LINE distance (haversine) since road
+ * distance is what we're trying to estimate. Each band has a road factor
+ * (multiplier on straight-line) and an average lorry speed.
+ *
+ * Override-friendly: the user can still type an exact travel time in the
+ * Travel Override field on Search/Quote tabs.
+ */
+// Distance bands — re-tuned 2026-06 against 337+49 invoiced loads (Mar–May
+// 2026, full-loads only). The May refresh slowed the A-roads band slightly
+// (35→38 mph, factor 1.35→1.45) because frequent routes like Wickwar→GL4 and
+// Naunton→GL20 were running ~£0.50/t too low; long-band sped up slightly to
+// stop motorway routes drifting high. Weighted MAE: £0.60/t, bias ~£0.
+const DISTANCE_BANDS = [
+  { maxStraightMi:  4, roadFactor: 1.50, speed: 22, label: 'lanes' },
+  { maxStraightMi: 18, roadFactor: 1.45, speed: 38, label: 'A-roads' },
+  { maxStraightMi: 999, roadFactor: 1.20, speed: 40, label: 'motorway' },
+];
+
+function bandFor(straightMi) {
+  for (const b of DISTANCE_BANDS) if (straightMi <= b.maxStraightMi) return b;
+  return DISTANCE_BANDS[DISTANCE_BANDS.length - 1];
+}
+
+/**
+ * Returns { straightMi, roadMi, carMin, band } for a given postcode pair.
+ */
+function computeRoute(srcPc, dstPc) {
+  const a = parsePostcode(srcPc), b = parsePostcode(dstPc);
+  const km = haversineKm(a.lat, a.lng, b.lat, b.lng);
+  const straightMi = km * 0.621371;
+  const band = bandFor(straightMi);
+  const roadMi = straightMi * band.roadFactor;
+  const carMin = (roadMi / band.speed) * 60;
+  return { straightMi, roadMi, carMin, band };
+}
+
+// Legacy roadMiles for the few non-haulage call sites — uses the tiered model.
+function roadMiles(srcPc, dstPc) {
+  return computeRoute(srcPc, dstPc).roadMi;
+}
+
+/**
+ * Returns travel minutes for haulage calculation.
+ * If user provided an override, use it verbatim (their judgement, no buffer/snap).
+ * Otherwise: tiered band-based car time → +buffer → smart snap-down.
+ *
+ * Returns { travelMin, adjustment } where adjustment includes route info
+ * for display (band, miles, car min, snap detail). Null if override was used.
+ */
+function resolveTravelMin(srcOrMiles, dstPostcode, travelOverride) {
+  if (!isNaN(travelOverride) && travelOverride > 0) {
+    return { travelMin: travelOverride, adjustment: null };
+  }
+  // Backward-compat shim: if called with (miles, override) like before, treat
+  // first arg as already-computed miles. This is used by some old call sites.
+  // The new flow passes a postcode string and we route via computeRoute.
+  if (typeof srcOrMiles === 'number') {
+    // Old style — derive carMin via flat speed (kept for compatibility,
+    // shouldn't be hit by main call sites any more).
+    const carMin = (srcOrMiles / settings.avgSpeed) * 60;
+    const adj = adjustTravelTime(carMin);
+    return { travelMin: adj.travelMin, adjustment: adj };
+  }
+  const route = computeRoute(srcOrMiles, dstPostcode);
+  const adj = adjustTravelTime(route.carMin);
+  adj.route = route;
+  return { travelMin: adj.travelMin, adjustment: adj };
+}
+
+// Legacy travelMinutes — uses flat avgSpeed setting.
+// Kept so the Settings panel "Avg Speed" input still does something
+// (it acts as the fallback for any code path that doesn't use computeRoute).
+function travelMinutes(miles) {
+  return (miles / settings.avgSpeed) * 60;
+}
+
+/**
+ * Smart adjustment of car-derived travel time:
+ *   1. Round car time UP to whole minute
+ *   2. Add lorry buffer (lorries are slower than the speed estimate suggests)
+ *   3. Snap-down: if we're within snapThreshold minutes of a cheaper trip-band
+ *      boundary, drop down to it. This is the "set 35min jobs at 34min" trick
+ *      that keeps you in the better trips/day band.
+ *
+ * Returns { travelMin, rawCarMin, bufferedMin, snapped, snappedFrom }
+ *   travelMin   = final value used in haulage cost
+ *   snapped     = true if snap-down applied
+ *   snappedFrom = the buffered value before snap-down (for display)
+ */
+function adjustTravelTime(rawCarMin) {
+  const carRounded = Math.ceil(rawCarMin);
+  const buffered = carRounded + (settings.lorryBuffer || 0);
+  const threshold = settings.snapThreshold || 0;
+  if (threshold <= 0) return { travelMin: buffered, rawCarMin, bufferedMin: buffered, snapped: false };
+
+  // What's the current trip count at the buffered time?
+  const dayMin = settings.dayHours * 60;
+  const loadMin2 = settings.loadTime * 2;
+  const currentTripMin = buffered * 2 + loadMin2;
+  const currentTrips = Math.floor(dayMin / currentTripMin);
+  if (currentTrips < 1) return { travelMin: buffered, rawCarMin, bufferedMin: buffered, snapped: false };
+
+  // Find the largest travel time that still gives currentTrips+1 trips (or more).
+  // Solve floor(dayMin / (t*2 + loadMin2)) >= currentTrips+1
+  //   => t*2 + loadMin2 <= dayMin / (currentTrips+1)
+  //   => t <= (dayMin/(currentTrips+1) - loadMin2) / 2
+  const targetTrips = currentTrips + 1;
+  const maxTravelForTarget = (dayMin / targetTrips - loadMin2) / 2;
+  // Snap to floor (whole minutes) so we don't price-up by fractional seconds
+  const snapTarget = Math.floor(maxTravelForTarget);
+
+  // Only snap if it's within the user's snap threshold AND it actually helps (positive int)
+  if (snapTarget >= 1 && (buffered - snapTarget) <= threshold && snapTarget < buffered) {
+    return { travelMin: snapTarget, rawCarMin, bufferedMin: buffered, snapped: true, snappedFrom: buffered };
+  }
+  return { travelMin: buffered, rawCarMin, bufferedMin: buffered, snapped: false };
+}
+
+/**
+ * Core haulage calculation — mirrors V2 logic:
+ *   trips = floor(dayMin / (travelOneWay*2 + loadTime*2))
+ *   £/tonne = (dayRate / trips) / loadSize
+ * Returns null if no trips possible.
+ */
+function haulageCost(travelMin) {
+  const dayMin = settings.dayHours * 60;
+  const driveMin = travelMin * 2;
+  const loadingMin = settings.loadTime * 2;
+  const tripMin = driveMin + loadingMin;
+  const trips = Math.floor(dayMin / tripMin);
+  if (trips < 1) return { perTonne:null, trips:0, tripMin, travelMin };
+  const perTrip = settings.dayRate / trips;
+  const perTonne = perTrip / settings.loadSize;
+  return { perTonne, trips, tripMin, travelMin, perTrip };
+}
+
+function fmt2(n){return n.toFixed(2)}
+function fmt0(n){return n.toFixed(0)}
+function fmt1(n){return n.toFixed(1)}
+
+// ═══════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════
+function switchTab(ev,tab) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  ev.target.classList.add('active');
+  if(tab==='quarries') renderQuarryCards();
+  if(tab==='site') renderQuote();
+}
+
+// ═══════════════════════════════════════════════
+//  MATERIAL DROPDOWN — unique sorted list
+// ═══════════════════════════════════════════════
+/**
+ * Returns the sorted list of CANONICAL material names available across all quarries.
+ * e.g. "2/6.3mm" and "2/6mm" both collapse to one entry "2/6mm".
+ */
+function allMaterials() {
+  const set = new Set();
+  quarries.forEach(q => q.materials.forEach(m => set.add(canonicalize(m))));
+  // smart-sort: numerically by leading size if sized aggregate, otherwise alpha
+  return [...set].sort((a, b) => {
+    const reA = a.match(/^(?:Recycled\s+)?(\d+(?:\.\d+)?)/);
+    const reB = b.match(/^(?:Recycled\s+)?(\d+(?:\.\d+)?)/);
+    if (reA && reB) {
+      const nA = parseFloat(reA[1]), nB = parseFloat(reB[1]);
+      if (nA !== nB) return nA - nB;
+    } else if (reA) return -1;
+    else if (reB) return 1;
+    return a.localeCompare(b);
+  });
+}
+
+/**
+ * For a quarry q and a CANONICAL material name, return the original material
+ * key (and its rate) actually used by that quarry, or null if it doesn't supply it.
+ */
+function quarryMaterialMatch(q, canonical) {
+  for (const m of q.materials) {
+    if (canonicalize(m) === canonical) {
+      return { original: m, rate: q.collectRates[m] || 0 };
+    }
+  }
+  return null;
+}
+
+/** Quarries that supply a given canonical material (any spelling). */
+function quarriesSupplying(canonical) {
+  return quarries.filter(q => quarryMaterialMatch(q, canonical) !== null);
+}
+function refreshMaterialDropdown() {
+  const mats = allMaterials();
+  const sel = document.getElementById('search-material');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">-- choose material --</option>';
+  mats.forEach(m=>{
+    const o = document.createElement('option');
+    o.value = m; o.textContent = m;
+    if(m===cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  MATERIAL SEARCH — works on canonical names
+// ═══════════════════════════════════════════════
+function searchMaterial() {
+  const canonical = document.getElementById('search-material').value;
+  const postcode = document.getElementById('search-postcode').value.trim();
+  const tonnage = parseFloat(document.getElementById('search-tonnage').value)||1;
+  const travelOverride = parseFloat(document.getElementById('search-travel-override').value);
+
+  if(!canonical) { alert('Choose a material first'); return; }
+  if(!postcode) { alert('Enter a delivery postcode'); return; }
+
+  const matches = quarriesSupplying(canonical);
+  if(!matches.length) { alert('No quarries supply that material'); return; }
+
+  const results = matches.map(q=>{
+    const match = quarryMaterialMatch(q, canonical);
+    const { travelMin: tMin, adjustment } = resolveTravelMin(q.postcode, postcode, travelOverride);
+    const miles = adjustment && adjustment.route ? adjustment.route.roadMi : roadMiles(q.postcode, postcode);
+    const haul = haulageCost(tMin);
+    const matCost = match.rate;
+    const tpt = matCost + (haul.perTonne||0);
+    return {
+      quarry: q,
+      material: canonical,
+      originalName: match.original,    // what this quarry calls it
+      miles,
+      travelMin: tMin,
+      adjustment,                       // for display
+      matCost,
+      haulPerTonne: haul.perTonne,
+      trips: haul.trips,
+      totalPerTonne: tpt,
+      lineMat: matCost*tonnage,
+      lineHaul: (haul.perTonne||0)*tonnage,
+      lineTotal: tpt*tonnage,
+      noPrice: matCost===0,
+    };
+  }).sort((a,b)=>{
+    if(a.noPrice && !b.noPrice) return 1;
+    if(!a.noPrice && b.noPrice) return -1;
+    return a.totalPerTonne - b.totalPerTonne;
+  });
+
+  document.getElementById('search-empty').style.display='none';
+  renderSearchResults(results, tonnage);
+}
+
+function renderSearchResults(results, tonnage) {
+  const container = document.getElementById('search-results');
+  if(!results.length) { container.innerHTML=''; return; }
+
+  const valid = results.filter(r=>!r.noPrice);
+  const bestTotal = valid.length ? valid[0].totalPerTonne : null;
+
+  let html = `<div class="stats-grid">
+    <div class="stat-box"><div class="stat-val">${results.length}</div><div class="stat-lbl">Sources</div></div>
+    <div class="stat-box"><div class="stat-val">${bestTotal!==null?'£'+fmt2(bestTotal):'—'}</div><div class="stat-lbl">Best £/t Delivered</div></div>
+    <div class="stat-box"><div class="stat-val">${tonnage}t</div><div class="stat-lbl">Tonnes</div></div>
+    <div class="stat-box"><div class="stat-val">${bestTotal!==null?'£'+fmt0(bestTotal*tonnage):'—'}</div><div class="stat-lbl">Best Job Total</div></div>
+  </div>`;
+
+  html += `<div class="results-hdr">
+    <span class="hdr-lbl">Quarry</span>
+    <span class="hdr-lbl">Travel</span>
+    <span class="hdr-lbl">Material /t</span>
+    <span class="hdr-lbl">Haulage /t</span>
+    <span class="hdr-lbl">Total /t</span>
+    <span class="hdr-lbl" style="text-align:right">Job Total</span>
+  </div>`;
+
+  results.forEach(r=>{
+    const isBest = !r.noPrice && r.totalPerTonne===bestTotal;
+    const showAlias = r.originalName && r.originalName !== r.material;
+    html += `<div class="result-row ${isBest?'best':''}">
+      <div>
+        <div class="result-name">${esc(r.quarry.name)}</div>
+        <div class="result-chips">
+          <span class="chip">${esc(r.quarry.postcode)}</span>
+          <span class="chip">${esc(r.quarry.operator)}</span>
+          ${showAlias?`<span class="chip" style="background:#161b1e;color:#9aa5ab;font-style:italic">as "${esc(r.originalName)}"</span>`:''}
+          ${isBest?'<span class="chip chip-blue">★ Best Price</span>':''}
+          ${r.noPrice?'<span class="chip" style="background:rgba(231,76,60,0.15);color:#e74c3c;border:1px solid rgba(231,76,60,0.3)">No price set</span>':''}
+        </div>
+      </div>
+      <div>
+        <div class="result-big">${fmt0(r.travelMin)}<span class="result-sub" style="font-size:11px;color:#7a8a92;margin-left:3px">min</span>${r.adjustment&&r.adjustment.snapped?`<span class="chip chip-blue" style="margin-left:6px;font-size:10px;padding:2px 5px" title="Auto-snapped from ${r.adjustment.snappedFrom}min to ${r.adjustment.travelMin}min to keep an extra trip per day">↓ ${r.adjustment.snappedFrom}</span>`:''}</div>
+        <div class="result-sub">${fmt1(r.miles)} mi · ${r.trips} trips/day${r.adjustment?` · car ${r.adjustment.rawCarMin?fmt0(r.adjustment.rawCarMin):'?'}min${r.adjustment.route?` (${r.adjustment.route.band.label})`:''} + ${settings.lorryBuffer}buf`:''}</div>
+      </div>
+      <div>
+        <div class="result-big">£${fmt2(r.matCost)}</div>
+        <div class="result-sub">material</div>
+      </div>
+      <div>
+        <div class="result-big">${r.haulPerTonne!==null?'£'+fmt2(r.haulPerTonne):'—'}</div>
+        <div class="result-sub">haulage</div>
+      </div>
+      <div>
+        <div class="result-big-xl" style="color:${isBest?'#00A8DA':'#e8eaeb'}">£${fmt2(r.totalPerTonne)}</div>
+        <div class="result-sub">delivered /t</div>
+      </div>
+      <div class="result-right">
+        <div style="font-size:20px;font-weight:800">£${fmt0(r.lineTotal)}</div>
+        <div class="result-sub">${tonnage}t total</div>
+        ${r.quarry.phone?`<div class="result-phone">${esc(r.quarry.phone)}</div>`:''}
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//  QUOTE BUILDER
+// ═══════════════════════════════════════════════
+
+// Standard Simson product list — mirrors the Blank Quote template.
+// Each row maps a Simson-style product name (the customer-facing wording)
+// to a canonical material name from the quarry data (for source lookup).
+// If canonical is null, the line has no automatic source and the user
+// will need to pick one or skip the line. The 'unit' is the unit shown
+// on the quote document.
+// Fixed disposal destinations for Muckaway — each has a name, postcode, and
+// the tip's own coords since these postcodes may not be in our standard table.
+const MUCKAWAY_DESTINATIONS = [
+  { id: 'wingmoor', name: 'Wingmoor Farm Recycling Centre', postcode: 'GL52 7RS',
+    lat: 51.9490, lng: -2.0830, notes: 'Stoke Orchard, Bishops Cleeve' },
+  { id: 'hempsted', name: 'Hempsted Recycling Centre',      postcode: 'GL2 5FR',
+    lat: 51.8530, lng: -2.2620, notes: 'Hempsted Lane, Gloucester' },
+];
+
+// Add the destinations' coords to our lookup table so they work in route calcs
+MUCKAWAY_DESTINATIONS.forEach(d => {
+  POSTCODE_COORDS[d.postcode] = { lat: d.lat, lng: d.lng };
+});
+
+const SIMSON_PRODUCTS = [
+  { simsonName: "Type 1 (Clause 803)",                                   canonical: "Quarried Type 1",     unit: "Tonne" },
+  { simsonName: "MLS Type 1 (Clause 803)",                               canonical: "MLS Type 1",          unit: "Tonne" },
+  { simsonName: "Type 3",                                                canonical: "Quarried Type 3",     unit: "Tonne" },
+  { simsonName: "6F5",                                                   canonical: "Quarried 6F5",        unit: "Tonne" },
+  { simsonName: "MLS 6F5",                                               canonical: "MLS 6F5",             unit: "Tonne" },
+  { simsonName: "2/6mm",                                                 canonical: "Quarried 2/6mm",      unit: "Tonne" },
+  { simsonName: "75mm Clean",                                            canonical: "Quarried 75mm Clean", unit: "Tonne" },
+  { simsonName: "40mm Clean",                                            canonical: "Quarried 40mm Clean", unit: "Tonne" },
+  { simsonName: "Permeable Paving Stone (20-4mm)",                       canonical: "Quarried 20/4mm",     unit: "Tonne" },
+  { simsonName: "10mm Clean",                                            canonical: "Quarried 10mm Clean", unit: "Tonne" },
+  { simsonName: "20mm Clean",                                            canonical: "Quarried 20mm Clean", unit: "Tonne" },
+  { simsonName: "14mm Clean",                                            canonical: "14mm Clean",          unit: "Tonne" },
+  { simsonName: "75/150mm",                                              canonical: "75/150mm",            unit: "Tonne" },
+  { simsonName: "600 Series",                                            canonical: "600 Series",          unit: "Tonne" },
+  { simsonName: "10mm Recycled Gravel",                                  canonical: "10mm Recycled Gravel",unit: "Tonne" },
+  { simsonName: "20mm Recycled Gravel",                                  canonical: "20mm Recycled Gravel",unit: "Tonne" },
+  { simsonName: "40mm Recycled Gravel",                                  canonical: "40mm Recycled Gravel",unit: "Tonne" },
+  { simsonName: "Sharp Sand",                                            canonical: "Sharp Sand",          unit: "Tonne" },
+  { simsonName: "Building Sand (0/2mm Screened)",                        canonical: "Building Sand",       unit: "Tonne" },
+  { simsonName: "Fill Sand",                                             canonical: "Fill Sand",           unit: "Tonne/8 W Load" },
+  { simsonName: "Type 1 Recycled",                                       canonical: "Type 1 Recycled",     unit: "8 W Load" },
+  { simsonName: "Recycled 6F5",                                          canonical: "Recycled 6F5",        unit: "8 W Load" },
+  { simsonName: "Recycled 75/40mm",                                      canonical: "Recycled 75/40mm",    unit: "8 W Load" },
+  { simsonName: "BS3882 Topsoil",                                        canonical: "BS3882 Topsoil",      unit: "8 W Load" },
+  { simsonName: "Inert Cartaway",                                        canonical: null,                  unit: "8 W Load" },
+  { simsonName: "Hardcore Away",                                         canonical: null,                  unit: "8 W Load" },
+  { simsonName: "Tarmac Away",                                           canonical: null,                  unit: "8 W Load" },
+  // ── Muckaway — priced per load, not per tonne ──
+  // Material cost is a fixed tip fee per load. Haulage is from the customer's
+  // site to the chosen disposal destination, priced per load (£/t × loadSize).
+  { simsonName: "Muckaway (to Wingmoor Farm)", canonical: null, unit: "Load",
+    perLoad: true, fixedMatCostPerLoad: 139, muckDestId: 'wingmoor' },
+  { simsonName: "Muckaway (to Hempsted)",      canonical: null, unit: "Load",
+    perLoad: true, fixedMatCostPerLoad: 139, muckDestId: 'hempsted' },
+];
+
+function initQuoteLines() {
+  if (quoteLines.length) return;
+  quoteLines = SIMSON_PRODUCTS.map(p => ({
+    id: nextLineId++,
+    simsonName: p.simsonName,
+    canonical:  p.canonical,
+    qty: '',
+    unit: p.unit,
+    included: true,
+    manualSource: null,
+    marginPct: 0,
+    isCustom: false,
+    // muckaway-specific
+    perLoad: p.perLoad || false,
+    fixedMatCostPerLoad: p.fixedMatCostPerLoad || null,
+    muckDestId: p.muckDestId || null,
+  }));
+}
+
+function findBestDelivered(canonical, dstPostcode, travelOverride) {
+  if (!canonical) return null;
+  const candidates = quarriesSupplying(canonical)
+    .map(q => {
+      const m = quarryMaterialMatch(q, canonical);
+      const { travelMin: tMin, adjustment } = resolveTravelMin(q.postcode, dstPostcode, travelOverride);
+      const miles = adjustment && adjustment.route ? adjustment.route.roadMi : roadMiles(q.postcode, dstPostcode);
+      const haul = haulageCost(tMin);
+      return {
+        quarry: q,
+        originalName: m.original,
+        matCost: m.rate,
+        haulPerTonne: haul.perTonne || 0,
+        totalPerTonne: m.rate + (haul.perTonne || 0),
+        miles, travelMin: tMin, adjustment, trips: haul.trips,
+        valid: m.rate > 0,
+      };
+    })
+    .filter(c => c.valid);
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => a.totalPerTonne - b.totalPerTonne);
+  return candidates[0];
+}
+
+/**
+ * For muckaway lines, haulage runs FROM the customer's site TO the tip.
+ * Returns per-load cost = haulage £/tonne × load size.
+ * The "source" for display purposes is the tip name, not a quarry.
+ */
+function findMuckawayHaulage(srcPostcode, muckDestId, travelOverride) {
+  if (!srcPostcode || !muckDestId) return null;
+  const dest = MUCKAWAY_DESTINATIONS.find(d => d.id === muckDestId);
+  if (!dest) return null;
+  const { travelMin: tMin, adjustment } = resolveTravelMin(srcPostcode, dest.postcode, travelOverride);
+  const haul = haulageCost(tMin);
+  if (!haul.perTonne) return null;
+  const haulPerLoad = haul.perTonne * settings.loadSize;
+  const miles = adjustment && adjustment.route ? adjustment.route.roadMi : roadMiles(srcPostcode, dest.postcode);
+  return {
+    dest,
+    travelMin: tMin,
+    adjustment,
+    haulPerTonne: haul.perTonne,
+    haulPerLoad,
+    trips: haul.trips,
+    miles,
+  };
+}
+
+function findSourceForLine(line, dstPostcode, travelOverride) {
+  // If user picked a manual source, use it. Otherwise auto-pick best.
+  if (line.manualSource) {
+    const q = quarries.find(x => x.id === line.manualSource);
+    const m = q && line.canonical ? quarryMaterialMatch(q, line.canonical) : null;
+    if (q && m) {
+      const { travelMin: tMin, adjustment } = resolveTravelMin(q.postcode, dstPostcode || 'GL1 1AA', travelOverride);
+      const miles = adjustment && adjustment.route ? adjustment.route.roadMi : roadMiles(q.postcode, dstPostcode || 'GL1 1AA');
+      const haul = haulageCost(tMin);
+      return {
+        quarry: q,
+        originalName: m.original,
+        matCost: m.rate,
+        haulPerTonne: haul.perTonne || 0,
+        totalPerTonne: m.rate + (haul.perTonne || 0),
+        miles, travelMin: tMin, adjustment, trips: haul.trips,
+        valid: m.rate > 0,
+      };
+    }
+  }
+  return findBestDelivered(line.canonical, dstPostcode, travelOverride);
+}
+
+function addQuoteLine() {
+  quoteLines.push({
+    id: nextLineId++,
+    simsonName: '',
+    canonical:  '',
+    qty: '',
+    unit: 'Tonne',
+    included: true,
+    manualSource: null,
+    marginPct: parseFloat(document.getElementById('q-default-margin').value) || 0,
+    isCustom: true,
+  });
+  renderQuote();
+}
+
+function removeQuoteLine(id) {
+  quoteLines = quoteLines.filter(l => l.id !== id);
+  renderQuote();
+}
+
+function setQuoteLine(id, field, value) {
+  const l = quoteLines.find(x => x.id === id);
+  if (!l) return;
+  if (field === 'manualSource') {
+    l.manualSource = value ? parseInt(value) : null;
+  } else if (field === 'included') {
+    l.included = value;
+  } else if (field === 'marginPct' || field === 'qty') {
+    l[field] = value === '' ? '' : (parseFloat(value) || 0);
+  } else if (field === 'canonical') {
+    l.canonical = value;
+    l.manualSource = null;          // clear source when material changes
+  } else {
+    l[field] = value;
+  }
+  renderQuote();
+}
+
+function applyDefaultMargin() {
+  const m = parseFloat(document.getElementById('q-default-margin').value) || 0;
+  quoteLines.forEach(l => { l.marginPct = m; });
+  renderQuote();
+}
+
+function resetQuote() {
+  if (!confirm('Reset all quote lines back to the standard Simson product list?')) return;
+  quoteLines = [];
+  initQuoteLines();
+  renderQuote();
+}
+
+function recalcQuote() { renderQuote(); }
+
+function renderQuote() {
+  initQuoteLines();
+  const container = document.getElementById('quote-lines');
+  const dstPostcode = document.getElementById('q-postcode').value.trim();
+  const travelOverride = parseFloat(document.getElementById('q-travel-override').value);
+  const hasDst = !!dstPostcode;
+  const mats = allMaterials();
+
+  let html = '';
+  let lineCount = 0, sumCost = 0, sumQuote = 0;
+
+  quoteLines.forEach(line => {
+    const margin = parseFloat(line.marginPct) || 0;
+
+    // ── MUCKAWAY LINE ──────────────────────────────────────────────
+    if (line.perLoad) {
+      const muck = hasDst ? findMuckawayHaulage(dstPostcode, line.muckDestId, travelOverride) : null;
+      const matCostPerLoad   = line.fixedMatCostPerLoad || 0;
+      const haulCostPerLoad  = muck ? muck.haulPerLoad : 0;
+      const costPerLoad      = matCostPerLoad + haulCostPerLoad;
+      const quotePerLoad     = costPerLoad * (1 + margin/100);
+      const noSrc            = !muck && line.included;
+      const destName         = MUCKAWAY_DESTINATIONS.find(d => d.id === line.muckDestId)?.name || '';
+
+      if (line.included && muck) { lineCount++; sumCost += costPerLoad; sumQuote += quotePerLoad; }
+
+      html += `<div class="quote-line ${!line.included?'skipped':''} ${noSrc&&hasDst?'unsourced':''}">
+        <input type="checkbox" ${line.included?'checked':''} onchange="setQuoteLine(${line.id},'included',this.checked)">
+        <div>
+          <div class="ql-name">${esc(line.simsonName)}</div>
+          <div class="ql-canon">→ ${esc(destName)}</div>
+        </div>
+        <div style="font-size:11px;color:#7a8a92;font-family:'Barlow',sans-serif;display:flex;align-items:center">
+          ${muck ? `${fmt0(muck.travelMin)} min · ${muck.trips} trips/day${muck.adjustment&&muck.adjustment.snapped?` <span style="color:#00A8DA">↓</span>`:''}` : (hasDst ? '<span style="color:#e74c3c">no route</span>' : '—')}
+        </div>
+        <input type="number" value="${line.qty}" min="0" step="1" placeholder="—" onchange="setQuoteLine(${line.id},'qty',this.value)">
+        <input type="text" value="${esc(line.unit||'')}" onchange="setQuoteLine(${line.id},'unit',this.value)">
+        <div class="ql-num">£${fmt2(matCostPerLoad)}<div class="ql-sub">/load (tip fee)</div></div>
+        <div class="ql-num">${muck?'£'+fmt2(haulCostPerLoad):'<span style="color:#5a6970">—</span>'}<div class="ql-sub">/load (${settings.loadSize}t)</div></div>
+        <input type="number" value="${line.marginPct}" min="0" max="500" step="1" onchange="setQuoteLine(${line.id},'marginPct',this.value)">
+        <div>
+          <div class="ql-quote">${muck?'£'+fmt2(quotePerLoad):'<span style="color:#5a6970">—</span>'}</div>
+          <div class="ql-sub">/load · cost £${fmt2(costPerLoad)}</div>
+        </div>
+      </div>`;
+      return;
+    }
+
+    // ── STANDARD LINE ──────────────────────────────────────────────
+    const best = hasDst ? findSourceForLine(line, dstPostcode, travelOverride) : null;
+    const costPerT  = best ? best.totalPerTonne : 0;
+    const quotePerT = costPerT * (1 + margin/100);
+
+    const matWordingCell = line.isCustom
+      ? `<input type="text" value="${esc(line.simsonName||'')}" placeholder="Material wording on quote" onchange="setQuoteLine(${line.id},'simsonName',this.value)">
+         <select onchange="setQuoteLine(${line.id},'canonical',this.value)" style="margin-top:4px;font-size:11px">
+           <option value="">-- material in price book --</option>
+           ${mats.map(m=>`<option value="${esc(m)}" ${m===line.canonical?'selected':''}>${esc(m)}</option>`).join('')}
+         </select>`
+      : `<div class="ql-name">${esc(line.simsonName)}</div>
+         <div class="ql-canon">→ ${esc(line.canonical||'(no auto-source)')}</div>`;
+
+    let srcOptions = '<option value="">' + (best && !line.manualSource ? `Auto: ${best.quarry.name}` : 'Auto (best price)') + '</option>';
+    if (line.canonical) {
+      quarriesSupplying(line.canonical).forEach(q => {
+        const m = quarryMaterialMatch(q, line.canonical);
+        if (!m || m.rate <= 0) return;
+        const tag = m.original !== line.canonical ? ` — ${m.original}` : '';
+        srcOptions += `<option value="${q.id}" ${line.manualSource===q.id?'selected':''}>${esc(q.name)} (£${fmt2(m.rate)})${esc(tag)}</option>`;
+      });
+    }
+
+    const noSrc = !best && line.included;
+    if (line.included && best) { lineCount++; sumCost += costPerT; sumQuote += quotePerT; }
+
+    html += `<div class="quote-line ${!line.included?'skipped':''} ${noSrc?'unsourced':''} ${line.isCustom?'custom':''}">
+      <input type="checkbox" ${line.included?'checked':''} onchange="setQuoteLine(${line.id},'included',this.checked)">
+      <div>${matWordingCell}</div>
+      <select onchange="setQuoteLine(${line.id},'manualSource',this.value)" ${!line.canonical?'disabled':''}>${srcOptions}</select>
+      <input type="number" value="${line.qty}" min="0" step="0.5" placeholder="—" onchange="setQuoteLine(${line.id},'qty',this.value)">
+      <input type="text" value="${esc(line.unit||'')}" onchange="setQuoteLine(${line.id},'unit',this.value)">
+      <div class="ql-num">${best ? '£'+fmt2(best.matCost) : '<span style="color:#5a6970">—</span>'}</div>
+      <div class="ql-num">${best ? '£'+fmt2(best.haulPerTonne)+(best.adjustment&&best.adjustment.snapped?'<span class="ql-sub" style="color:#00A8DA">↓</span>':'') : '<span style="color:#5a6970">—</span>'}</div>
+      <input type="number" value="${line.marginPct}" min="0" max="500" step="1" onchange="setQuoteLine(${line.id},'marginPct',this.value)">
+      <div>
+        <div class="ql-quote">${best ? '£'+fmt2(quotePerT) : '<span style="color:#5a6970">—</span>'}</div>
+        <div class="ql-sub">${best ? 'cost £'+fmt2(costPerT) : (line.canonical ? 'no source' : 'pick material')}${line.isCustom ? ` · <button class="icon-btn" onclick="removeQuoteLine(${line.id})" title="Remove">✕</button>` : ''}</div>
+      </div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+
+  const summary = document.getElementById('quote-summary');
+  if (lineCount > 0) {
+    summary.style.display = 'grid';
+    document.getElementById('qsum-lines').textContent = lineCount;
+    document.getElementById('qsum-cost').textContent  = '£'+fmt2(sumCost/lineCount);
+    document.getElementById('qsum-quote').textContent = '£'+fmt2(sumQuote/lineCount);
+    const avgMargin = sumCost > 0 ? ((sumQuote - sumCost) / sumCost) * 100 : 0;
+    document.getElementById('qsum-margin').textContent = fmt1(avgMargin) + '%';
+  } else {
+    summary.style.display = 'none';
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  PRINTABLE QUOTE DOCUMENT
+//  Opens a new window styled to mirror the Blank_Quote template.
+//  User can Ctrl+P to save as PDF or print to paper.
+// ═══════════════════════════════════════════════
+function openPrintableQuote() {
+  const customer  = document.getElementById('q-customer').value.trim() || '[Customer Name]';
+  const siteName  = document.getElementById('q-site-name').value.trim();
+  const deliveryAddr = document.getElementById('q-delivery-addr').value.trim();
+  const postcode  = document.getElementById('q-postcode').value.trim();
+  const preparedBy= document.getElementById('q-prepared-by').value.trim() || 'Jordan Catto';
+  const email     = document.getElementById('q-email').value.trim() || 'jordan@simsonaggregate.co.uk';
+  const tel       = document.getElementById('q-tel').value.trim() || '01886 358 900';
+  const travelOverride = parseFloat(document.getElementById('q-travel-override').value);
+
+  const deliveryFull = [siteName, deliveryAddr, postcode].filter(Boolean).join(', ') || '[Delivery Location]';
+
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+
+  let rowsHtml = '';
+  quoteLines.forEach(line => {
+    if (!line.included) return;
+    if (!line.simsonName) return;
+    const margin = parseFloat(line.marginPct) || 0;
+    const qtyCell = (line.qty !== '' && line.qty !== null && !isNaN(line.qty)) ? String(line.qty) : '';
+
+    if (line.perLoad) {
+      // Muckaway — price per load
+      const muck = findMuckawayHaulage(postcode, line.muckDestId, travelOverride);
+      const matCostPerLoad = line.fixedMatCostPerLoad || 0;
+      const haulPerLoad    = muck ? muck.haulPerLoad : 0;
+      const costPerLoad    = matCostPerLoad + haulPerLoad;
+      const quotePerLoad   = costPerLoad * (1 + margin/100);
+      const priceCell      = muck ? `£${fmt2(quotePerLoad)}` : '<span style="color:#888">POA</span>';
+      rowsHtml += `<tr>
+        <td>${esc(line.simsonName)}</td>
+        <td style="text-align:right">${priceCell}</td>
+        <td style="text-align:right">${esc(qtyCell)}</td>
+        <td>${esc(line.unit||'Load')}</td>
+      </tr>`;
+    } else {
+      // Standard — price per tonne
+      const best     = findSourceForLine(line, postcode, travelOverride);
+      const costPerT = best ? best.totalPerTonne : null;
+      const quotePerT = costPerT !== null ? costPerT * (1 + margin/100) : null;
+      const priceCell = quotePerT !== null ? `£${fmt2(quotePerT)}` : '<span style="color:#888">POA</span>';
+      rowsHtml += `<tr>
+        <td>${esc(line.simsonName)}</td>
+        <td style="text-align:right">${priceCell}</td>
+        <td style="text-align:right">${esc(qtyCell)}</td>
+        <td>${esc(line.unit||'Tonne')}</td>
+      </tr>`;
+    }
+  });
+
+  if (!rowsHtml) {
+    rowsHtml = '<tr><td colspan="4" style="text-align:center;color:#888;padding:20px">No quote lines included. Tick at least one material on the Quote Builder tab.</td></tr>';
+  }
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>Quotation for ${esc(customer)}</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  body { font-family: 'Calibri','Segoe UI',Arial,sans-serif; color:#000; font-size:11pt; line-height:1.4; max-width:760px; margin:0 auto; padding:8px 10px; }
+  .header { border-bottom: 2px solid #003c5a; padding-bottom: 12px; margin-bottom: 18px; }
+  .company { font-size: 16pt; font-weight: 700; color: #003c5a; letter-spacing:0.02em; }
+  .address { font-size: 10pt; color:#444; margin-top: 2px; line-height: 1.4; }
+  .meta { display:flex; justify-content: space-between; align-items: flex-end; margin-top: 6px; font-size: 10pt; color:#444; }
+  .meta strong { color:#000 }
+  .quote-for { margin: 18px 0 10px; }
+  .quote-for div { margin: 3px 0; font-size: 11pt; }
+  .quote-for .label { font-weight: 700; display: inline-block; width: 130px; color:#003c5a; }
+  .intro { margin: 16px 0 12px; font-size: 11pt; }
+  table.materials { width:100%; border-collapse: collapse; font-size: 10.5pt; margin: 8px 0 18px; }
+  table.materials th { background: #003c5a; color: #fff; text-align: left; padding: 8px 10px; font-weight: 600; font-size: 10pt; letter-spacing:0.03em; }
+  table.materials th:nth-child(2), table.materials th:nth-child(3) { text-align:right; }
+  table.materials td { padding: 7px 10px; border-bottom: 1px solid #ddd; }
+  table.materials tr:nth-child(even) td { background: #f6f8fa; }
+  .validity { margin: 18px 0 6px; font-size: 10pt; font-style: italic; color:#444; }
+  .tc-note { font-size: 9pt; color:#666; }
+  .footer { margin-top: 30px; padding-top: 10px; border-top: 1px solid #ddd; font-size: 8.5pt; color:#777; text-align:center; }
+  .actions { position: fixed; top: 10px; right: 10px; background:#003c5a; padding:8px 12px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
+  .actions button { background:#fff; color:#003c5a; border:none; padding:6px 14px; margin-left:4px; font-weight:700; cursor:pointer; border-radius:4px; font-size:11px; }
+  .actions button:hover { background:#e8f0f5; }
+  @media print { .actions { display:none } body { padding:0 } }
+</style></head><body>
+
+<div class="actions">
+  <button onclick="window.print()">🖨 Print / Save as PDF</button>
+  <button onclick="window.close()">Close</button>
+</div>
+
+<div class="header">
+  <div class="company">Simson Aggregate Solutions Ltd</div>
+  <div class="address">
+    Laugherne Villa, Martley, Worcestershire WR6 6QB &nbsp;·&nbsp; www.simsonaggregate.co.uk<br>
+    Head Office: <strong>01886 358900</strong>
+  </div>
+  <div class="meta">
+    <span>Quote Date: <strong>${esc(dateStr)}</strong></span>
+    <span>Ref: SQ.${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}</span>
+  </div>
+</div>
+
+<div class="quote-for">
+  <div><span class="label">Quotation for:</span> <strong>${esc(customer)}</strong></div>
+  <div><span class="label">Delivery to:</span> ${esc(deliveryFull)}</div>
+  <div><span class="label">Prepared by:</span> ${esc(preparedBy)}</div>
+  <div><span class="label">Email:</span> ${esc(email)}</div>
+  <div><span class="label">Tel:</span> ${esc(tel)}</div>
+</div>
+
+<div class="intro">We are pleased to quote you for the following:</div>
+
+<table class="materials">
+  <thead>
+    <tr><th>Material</th><th>Price</th><th>Quantity</th><th>Unit</th></tr>
+  </thead>
+  <tbody>
+    ${rowsHtml}
+  </tbody>
+</table>
+
+<div class="validity"><strong>Quotes valid for 20 business days unless otherwise agreed.</strong></div>
+<div class="tc-note">Please see overleaf for our full terms and conditions.</div>
+
+<div class="footer">
+  Registered in England and Wales · Company No. 13398063 · Registered Office: Guinness Park, Leigh Sinton WR13 5EQ
+</div>
+
+</body></html>`;
+
+  const w = window.open('', '_blank', 'width=900,height=1100');
+  if (!w) {
+    alert('Pop-up blocked. Please allow pop-ups from this page to generate the quote.');
+    return;
+  }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
+// ═══════════════════════════════════════════════
+//  CSV EXPORT — clean quote template for internal use
+//  Columns: Postcode · Customer/Site · Material · Source · Cost Price · Sell Price
+// ═══════════════════════════════════════════════
+function exportQuoteCSV() {
+  const customer    = document.getElementById('q-customer').value.trim() || 'Customer';
+  const siteName    = document.getElementById('q-site-name').value.trim();
+  const deliverAddr = document.getElementById('q-delivery-addr').value.trim();
+  const postcode    = document.getElementById('q-postcode').value.trim();
+  const preparedBy  = document.getElementById('q-prepared-by').value.trim();
+  const travelOverride = parseFloat(document.getElementById('q-travel-override').value);
+
+  const today = new Date().toLocaleDateString('en-GB');
+  const csvQ  = s => { const v = String(s??''); return (v.includes(',')||v.includes('"')||v.includes('\n')) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+  const row   = (...cells) => cells.map(csvQ).join(',');
+
+  const lines = [];
+
+  // ── Header block ──────────────────────────────────────────────────────────
+  lines.push(row('SIMSON AGGREGATE SOLUTIONS LTD','','','','',''));
+  lines.push(row('Laugherne Villa · Martley · WR6 6QB · www.simsonaggregate.co.uk','','','','',''));
+  lines.push(row('','','','','',''));
+  lines.push(row('Date:',         today,        '', 'Prepared by:', preparedBy, ''));
+  lines.push(row('Customer:',     customer,     '', 'Postcode:',    postcode,   ''));
+  lines.push(row('Site:',  siteName||deliverAddr||'', '', '', '', ''));
+  lines.push(row('','','','','',''));
+  lines.push(row('','','','','',''));
+
+  // ── Column headers ────────────────────────────────────────────────────────
+  lines.push(row('Postcode', 'Customer / Site', 'Material', 'Source', 'Cost Price', 'Sell Price'));
+  lines.push(row('--------', '----------------', '--------', '------', '----------', '----------'));
+
+  // ── Data rows ─────────────────────────────────────────────────────────────
+  let hasRows = false;
+  quoteLines.forEach(line => {
+    if (!line.included || !line.simsonName) return;
+    const margin = parseFloat(line.marginPct) || 0;
+
+    if (line.perLoad) {
+      const muck = findMuckawayHaulage(postcode, line.muckDestId, travelOverride);
+      const dest = MUCKAWAY_DESTINATIONS.find(d => d.id === line.muckDestId);
+      const matCostPerLoad = line.fixedMatCostPerLoad || 0;
+      const haulPerLoad    = muck ? muck.haulPerLoad : 0;
+      const costPerLoad    = matCostPerLoad + haulPerLoad;
+      const sellPerLoad    = costPerLoad * (1 + margin/100);
+      const costStr        = muck ? `£${fmt2(costPerLoad)} /load` : 'POA';
+      const sellStr        = muck ? `£${fmt2(sellPerLoad)} /load` : 'POA';
+      lines.push(row(postcode, `${customer}${siteName?' / '+siteName:''}`, line.simsonName, dest?.name||'', costStr, sellStr));
+      hasRows = true;
+    } else {
+      const best = findSourceForLine(line, postcode, travelOverride);
+      const costPerT = best ? best.totalPerTonne : null;
+      const sellPerT = costPerT !== null ? costPerT * (1 + margin/100) : null;
+      const costStr  = costPerT !== null ? `£${fmt2(costPerT)} /t` : 'POA';
+      const sellStr  = sellPerT !== null ? `£${fmt2(sellPerT)} /t` : 'POA';
+      const source   = best ? best.quarry.name : '—';
+      lines.push(row(postcode, `${customer}${siteName?' / '+siteName:''}`, line.simsonName, source, costStr, sellStr));
+      hasRows = true;
+    }
+  });
+
+  if (!hasRows) {
+    lines.push(row('', '', 'No included lines', '', '', ''));
+  }
+
+  lines.push(row('','','','','',''));
+  lines.push(row('','','','PRICES VALID FOR 20 BUSINESS DAYS','',''));
+
+  // ── Download ──────────────────────────────────────────────────────────────
+  const csv  = lines.join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = (customer+'_'+postcode).replace(/[^a-z0-9_-]/gi,'_') + '_quote.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════════
+//  QUARRY CARDS (Prices tab)
+// ═══════════════════════════════════════════════
+function renderQuarryCards() {
+  const container = document.getElementById('quarry-cards');
+  let html = '';
+  quarries.forEach(q=>{
+    const editing = editingQuarryId === q.id;
+
+    // Header: read-only display vs editable form
+    let headerHtml;
+    if (editing) {
+      headerHtml = `<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1.4fr;gap:10px;width:100%">
+        <div>
+          <span class="lbl" style="font-size:9px;margin-bottom:3px">Quarry Name</span>
+          <input type="text" value="${esc(q.name||'')}" onchange="updateQuarryField(${q.id},'name',this.value)" style="width:100%">
+        </div>
+        <div>
+          <span class="lbl" style="font-size:9px;margin-bottom:3px">Postcode</span>
+          <input type="text" value="${esc(q.postcode||'')}" onchange="updateQuarryField(${q.id},'postcode',this.value.toUpperCase())" oninput="this.value=this.value.toUpperCase()" style="width:100%">
+        </div>
+        <div>
+          <span class="lbl" style="font-size:9px;margin-bottom:3px">Operator</span>
+          <input type="text" value="${esc(q.operator||'')}" onchange="updateQuarryField(${q.id},'operator',this.value)" style="width:100%">
+        </div>
+        <div>
+          <span class="lbl" style="font-size:9px;margin-bottom:3px">Phone</span>
+          <input type="text" value="${esc(q.phone||'')}" onchange="updateQuarryField(${q.id},'phone',this.value)" style="width:100%">
+        </div>
+        <div style="grid-column:span 4">
+          <span class="lbl" style="font-size:9px;margin-bottom:3px">Notes</span>
+          <input type="text" value="${esc(q.notes||'')}" onchange="updateQuarryField(${q.id},'notes',this.value)" style="width:100%">
+        </div>
+      </div>`;
+    } else {
+      headerHtml = `<div>
+        <div class="card-title">${esc(q.name)}</div>
+        <div class="card-meta">
+          ${esc(q.operator||'')} · <span class="pc">${esc(q.postcode)}</span>
+          ${q.phone?` · ${esc(q.phone)}`:''}
+          ${q.notes?` · <span class="note">${esc(q.notes)}</span>`:''}
+        </div>
+      </div>`;
+    }
+
+    html += `<div class="card">
+      <div class="card-top">
+        ${headerHtml}
+        <div class="card-actions">
+          <button class="outline-btn" onclick="toggleEdit(${q.id})">${editing?'✓ Done':'✏ Edit'}</button>
+          <button class="red-btn" onclick="deleteQuarry(${q.id})">✕</button>
+        </div>
+      </div>
+      <div class="materials-grid">`;
+    q.materials.forEach((mat, idx)=>{
+      const r = q.collectRates[mat]||0;
+      const canon = canonicalize(mat);
+      const showCanon = canon !== mat;
+      const safeMat = esc(mat).replace(/'/g,"\\'");
+      if (editing) {
+        // Editable name + rate + remove
+        html += `<div class="mat-tile editing">
+          <div style="flex:1">
+            <input type="text" class="mat-name-input" value="${esc(mat)}"
+              onchange="renameMat(${q.id}, ${idx}, this.value)"
+              title="Edit this material's name. Match the wording across quarries to merge duplicates.">
+            <div class="mat-sub">${showCanon?`groups as: <span style="color:#00A8DA">${esc(canon)}</span>`:'collect rate /t'}</div>
+          </div>
+          <div class="mat-rate">
+            <span class="pound">£</span>
+            <input type="number" class="rate-input" value="${r}" step="0.05" min="0" onchange="updateRate(${q.id},'${safeMat}',this.value)">
+            <button class="icon-btn" onclick="removeMat(${q.id},'${safeMat}')" title="Remove material">✕</button>
+          </div>
+        </div>`;
+      } else {
+        html += `<div class="mat-tile">
+          <div>
+            <div class="mat-name">${esc(mat)}</div>
+            <div class="mat-sub">${showCanon?`groups as <span style="color:#5a7884">${esc(canon)}</span>`:'collect rate /t'}</div>
+          </div>
+          <div class="mat-rate">
+            <span class="pound">£</span>
+            <input type="number" class="rate-input" value="${r}" step="0.05" min="0" onchange="updateRate(${q.id},'${safeMat}',this.value)">
+          </div>
+        </div>`;
+      }
+    });
+    html += `</div>`;
+    if(editing){
+      // Build a datalist of all existing canonical + raw names across all quarries
+      // so the user can pick a consistent name and avoid creating duplicates.
+      const allNames = new Set();
+      quarries.forEach(qq => qq.materials.forEach(m => { allNames.add(m); allNames.add(canonicalize(m)); }));
+      const dlOpts = [...allNames].sort().map(n=>`<option value="${esc(n)}">`).join('');
+      html += `<div class="add-mat-row">
+        <input id="newmat-name-${q.id}" placeholder="Material name (start typing to match existing)" list="matnames-${q.id}" autocomplete="off">
+        <datalist id="matnames-${q.id}">${dlOpts}</datalist>
+        <span class="pound">£</span>
+        <input type="number" id="newmat-rate-${q.id}" placeholder="0.00" class="rate-input" step="0.05">
+        <span style="font-size:11px;color:#5a6970;font-family:Barlow,sans-serif">/tonne</span>
+        <button class="outline-btn" onclick="addMat(${q.id})">+ Add</button>
+      </div>
+      <div style="font-size:11px;color:#5a6970;font-family:Barlow,sans-serif;margin-top:6px;line-height:1.5">
+        💡 Tip: edit a material's name above to match how other quarries spell it — identical or equivalent names merge into one option in the Search & Quote tabs. The blue "groups as" line shows which canonical material each name currently maps to.
+      </div>`;
+    }
+    html += `</div>`;
+  });
+  container.innerHTML = html;
+}
+
+// Generic field updater for quarry meta (name, postcode, operator, phone, notes)
+function updateQuarryField(qid, field, value) {
+  const q = quarries.find(x => x.id === qid);
+  if (!q) return;
+  q[field] = value;
+  saveQuarries();
+  // Re-render if quote is open so source dropdowns reflect new name/postcode
+  if (typeof renderQuote === 'function') renderQuote();
+}
+
+let groupingOpen = false;
+function toggleGrouping() {
+  groupingOpen = !groupingOpen;
+  document.getElementById('grouping-panel').style.display = groupingOpen ? 'block' : 'none';
+  document.querySelectorAll('.quarries-top .outline-btn')[0].textContent = groupingOpen ? '✕ Close Grouping' : '🔎 Material Grouping';
+  if (groupingOpen) renderGrouping();
+}
+function renderGrouping() {
+  // Build canonical -> list of {quarry, rawName, rate}
+  const groups = {};
+  quarries.forEach(q => {
+    q.materials.forEach(m => {
+      const canon = canonicalize(m);
+      (groups[canon] = groups[canon] || []).push({ quarry: q.name, raw: m, rate: q.collectRates[m]||0 });
+    });
+  });
+  const sortedCanon = Object.keys(groups).sort((a,b)=>{
+    const ra=a.match(/^(?:Recycled\s+)?(\d+(?:\.\d+)?)/), rb=b.match(/^(?:Recycled\s+)?(\d+(?:\.\d+)?)/);
+    if(ra&&rb){const na=parseFloat(ra[1]),nb=parseFloat(rb[1]); if(na!==nb)return na-nb;}
+    else if(ra)return-1; else if(rb)return 1;
+    return a.localeCompare(b);
+  });
+
+  let html = '<div style="display:flex;flex-direction:column;gap:4px">';
+  sortedCanon.forEach(canon => {
+    const entries = groups[canon];
+    const quarryCount = new Set(entries.map(e=>e.quarry)).size;
+    // distinct raw spellings
+    const rawSpellings = [...new Set(entries.map(e=>e.raw))];
+    const hasVariants = rawSpellings.length > 1;
+    const onlyOne = quarryCount === 1;
+
+    html += `<div style="background:#161b1e;border:1px solid rgba(255,255,255,0.05);border-radius:6px;padding:10px 14px;${hasVariants?'border-left:3px solid #00A8DA;':''}">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:#e8eaeb">${esc(canon)}</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          ${hasVariants?`<span class="chip chip-blue" style="font-size:10px">${rawSpellings.length} spellings → merged</span>`:''}
+          ${onlyOne?'<span class="chip" style="font-size:10px;background:rgba(224,160,48,0.12);color:#e0a030;border:1px solid rgba(224,160,48,0.3)">⚠ only one quarry</span>':`<span class="chip" style="font-size:10px">${quarryCount} quarries</span>`}
+        </div>
+      </div>
+      <div style="font-size:11px;color:#7a8a92;font-family:Barlow,sans-serif;margin-top:6px;line-height:1.6">
+        ${entries.map(e=>`${esc(e.quarry.split(' ')[0])}: <span style="color:#9aa5ab">"${esc(e.raw)}"</span> £${fmt2(e.rate)}`).join(' · ')}
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('grouping-content').innerHTML = html;
+}
+function toggleEdit(id) { editingQuarryId = (editingQuarryId===id)?null:id; renderQuarryCards(); }
+function updateRate(qid, mat, val) {
+  const q = quarries.find(x=>x.id===qid);
+  if(q){ q.collectRates[mat] = parseFloat(val)||0; saveQuarries(); }
+}
+/**
+ * Rename a material in a quarry's price list, keeping its rate and position.
+ * idx is the index in q.materials so we rename the exact entry the user edited
+ * (handles the case where the same raw name appears more than once).
+ */
+function renameMat(qid, idx, newName) {
+  const q = quarries.find(x=>x.id===qid);
+  if(!q) return;
+  newName = String(newName||'').trim();
+  const oldName = q.materials[idx];
+  if(!newName || newName === oldName) { renderQuarryCards(); return; }
+
+  // If the new name already exists elsewhere in this quarry, merge: keep the
+  // existing rate unless this one is set, then drop the duplicate slot.
+  const rate = q.collectRates[oldName] || 0;
+  const existingIdx = q.materials.findIndex((m,i)=> i!==idx && m===newName);
+
+  // Remove old key
+  delete q.collectRates[oldName];
+
+  if (existingIdx !== -1) {
+    // Merge into existing entry — prefer a non-zero rate
+    if (rate > 0) q.collectRates[newName] = rate;
+    else if (!(newName in q.collectRates)) q.collectRates[newName] = 0;
+    // remove the slot we just edited
+    q.materials.splice(idx, 1);
+  } else {
+    q.materials[idx] = newName;
+    q.collectRates[newName] = rate;
+  }
+  saveQuarries(); renderQuarryCards(); refreshMaterialDropdown();
+  if (typeof renderQuote === 'function') renderQuote();
+  if (groupingOpen) renderGrouping();
+}
+function removeMat(qid, mat) {
+  const q = quarries.find(x=>x.id===qid);
+  if(!q) return;
+  q.materials = q.materials.filter(m=>m!==mat);
+  delete q.collectRates[mat];
+  saveQuarries(); renderQuarryCards(); refreshMaterialDropdown();
+  if (typeof renderQuote === 'function') renderQuote();
+  if (groupingOpen) renderGrouping();
+}
+function addMat(qid) {
+  const q = quarries.find(x=>x.id===qid);
+  if(!q) return;
+  const nameEl = document.getElementById('newmat-name-'+qid);
+  const rateEl = document.getElementById('newmat-rate-'+qid);
+  const mat = nameEl.value.trim();
+  if(!mat) return;
+  if(!q.materials.includes(mat)) {
+    q.materials.push(mat);
+    q.collectRates[mat] = parseFloat(rateEl.value)||0;
+  } else {
+    // already exists — just update the rate if one was entered
+    const newRate = parseFloat(rateEl.value);
+    if(!isNaN(newRate)) q.collectRates[mat] = newRate;
+  }
+  saveQuarries(); renderQuarryCards(); refreshMaterialDropdown();
+  if (typeof renderQuote === 'function') renderQuote();
+  if (groupingOpen) renderGrouping();
+}
+function deleteQuarry(id) {
+  if(!confirm('Remove this quarry?')) return;
+  quarries = quarries.filter(q=>q.id!==id);
+  saveQuarries(); renderQuarryCards(); refreshMaterialDropdown();
+}
+function toggleAddQuarry() {
+  addQuarryOpen = !addQuarryOpen;
+  document.getElementById('add-quarry-form').style.display = addQuarryOpen?'block':'none';
+  document.querySelector('.quarries-top .outline-btn').textContent = addQuarryOpen?'✕ Cancel':'+ Add Quarry';
+}
+function saveNewQuarry() {
+  const name = document.getElementById('nq-name').value.trim();
+  const postcode = document.getElementById('nq-postcode').value.trim().toUpperCase();
+  if(!name||!postcode) { alert('Name and postcode are required'); return; }
+  quarries.push({
+    id: nextId++,
+    name,
+    postcode,
+    operator: document.getElementById('nq-operator').value.trim(),
+    phone: document.getElementById('nq-phone').value.trim(),
+    notes: document.getElementById('nq-notes').value.trim(),
+    materials:[], collectRates:{}
+  });
+  ['nq-name','nq-postcode','nq-operator','nq-phone','nq-notes'].forEach(id=>document.getElementById(id).value='');
+  toggleAddQuarry();
+  saveQuarries(); renderQuarryCards(); refreshMaterialDropdown();
+}
+
+// ═══════════════════════════════════════════════
+//  UTILITY
+// ═══════════════════════════════════════════════
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
+loadSettings();
+refreshAssumptionStrip();
+refreshMaterialDropdown();
+// re-sync nextId in case loaded quarries had higher ids
+nextId = Math.max(nextId, ...quarries.map(q=>q.id))+1;
+// pre-populate the quote builder with Simson's standard product list
+initQuoteLines();
+renderQuote();
+</script>
+</body>
+</html>
